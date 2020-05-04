@@ -4,7 +4,8 @@ using System.Text;
 
 namespace ClassLibrary
 {
-    class Menu
+    public static class Menu
     {
+
     }
 }
