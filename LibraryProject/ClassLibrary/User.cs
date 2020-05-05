@@ -5,7 +5,9 @@ using System.Text;
 namespace ClassLibrary
 {
     public class User
-    {       
+    {
+        private static int currentUserID = 0;
+        private int userID;
         private string name;
         private string surName;
         private float penalty;
@@ -17,12 +19,26 @@ namespace ClassLibrary
             this.SurName = null;
             this.Penalty = 0;
             this.UsersBorrowings.Clear();
+            this.UserID = 0;
         }
 
         public User(string name, string surname)
         {
             this.Name = null;
             this.SurName = null;
+            this.UserID = currentUserID++;
+        }
+
+        public int UserID
+        {
+            get
+            {
+                return this.userID;
+            }
+            private set
+            {
+                this.userID = value;
+            }
         }
 
         public string Name
@@ -78,17 +94,15 @@ namespace ClassLibrary
             private static int currentBorrowID = 0;
 
             private int borrowID;
-            private ushort elementID;
+            private int elementID;
             private DateTime borrowDate;
             private DateTime returnDate;
             private bool borrowStatus;
 
-            
-
-            public Borrowing(DateTime date, ushort bookID)
+            public Borrowing(DateTime date, int elementID)
             {
                 this.BorrowDate = date;
-                this.ElementID = bookID;
+                this.ElementID = elementID;
                 this.BorrowID = currentBorrowID++;
                 this.BorrowStatus = true;
             }
@@ -105,7 +119,7 @@ namespace ClassLibrary
                 }
             }
 
-            public ushort ElementID
+            public int ElementID
             {
                 get
                 {
