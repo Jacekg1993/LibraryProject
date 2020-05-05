@@ -71,15 +71,19 @@ namespace ClassLibrary
             UsersBorrowings[borrowID].BorrowStatus = false;
         }
 
+        
+
         private class Borrowing
         {
             private static int currentBorrowID = 0;
-           
+
             private int borrowID;
             private ushort elementID;
             private DateTime borrowDate;
             private DateTime returnDate;
             private bool borrowStatus;
+
+            
 
             public Borrowing(DateTime date, ushort bookID)
             {
@@ -143,7 +147,7 @@ namespace ClassLibrary
                 {
                     return this.borrowStatus;
                 }
-                private set
+                set
                 {
                     this.borrowStatus = value;
                 }
