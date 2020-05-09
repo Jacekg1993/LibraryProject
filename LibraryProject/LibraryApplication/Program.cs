@@ -5,20 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LibraryApplication
-{
+{  
     class Program
-    {
+    {     
         static void Main(string[] args)
         {
-            //Book a = new Book("Godfather", "Criminal", 300);
+            List<Book> listbook = new List<Book>();
+            listbook.Add(TextFileHandler.CreateNewBook("Wiedzmin 3", "fantasy", 500));
 
-            OrdinaryUser b = new OrdinaryUser("Jacek", "Gos", 2);
-
-
-            Console.WriteLine(b.SurName);
-
-            
+            Console.WriteLine(listbook[0].ElementTitle);
 
             Console.ReadKey();
         }
