@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ClassLibrary
 {
-    public class User
+    public abstract class User
     {
         public int UserID { get; private set; }
         public string Name { get; private set; }
-        public string SurName { get; private set; }
-        public float Penalty { get; set; }
-        private List<Borrowing> UsersBorrowings = new List<Borrowing>();
+        public string SurName { get; private set; }       
+        public byte UserType { get; private set; }
+        protected List<Borrowing> UsersBorrowings = new List<Borrowing>();
 
         private static int currentUserID = 0;
 
@@ -18,29 +18,19 @@ namespace ClassLibrary
         {
             this.Name = null;
             this.SurName = null;
-            this.Penalty = 0;
             this.UsersBorrowings.Clear();
             this.UserID = 0;
         }
 
-        public User(string name, string surname)
+        public User(string name, string surname, byte type)
         {
-            this.Name = null;
-            this.SurName = null;
+            this.Name = name;
+            this.SurName = surname;
             this.UserID = currentUserID++;
+            this.UserType = type;
         }
-      
-        public void BorrowLibraryElement(DateTime date, ushort elementID)
-        {
-            UsersBorrowings.Add(new Borrowing(date, elementID));
-        }
-
-        public void ReturnLibraryElement(DateTime date, int borrowID)
-        {
-            UsersBorrowings[borrowID].BorrowStatus = false;
-        }
-       
-        private class Borrowing
+                    
+        protected class Borrowing
         {
             public int BorrowID { get; private set; }
             public int ElementID { get; private set; }

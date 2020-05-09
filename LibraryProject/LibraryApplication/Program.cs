@@ -11,9 +11,12 @@ namespace LibraryApplication
     {
         static void Main(string[] args)
         {
-            LibraryCollectionElement a = new Book("Godfather", "Criminal", 300);
+            //Book a = new Book("Godfather", "Criminal", 300);
 
-            Console.WriteLine(a.);
+            OrdinaryUser b = new OrdinaryUser("Jacek", "Gos", 2);
+
+
+            Console.WriteLine(b.SurName);
 
             Console.ReadKey();
         }

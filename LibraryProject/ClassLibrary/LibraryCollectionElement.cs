@@ -8,10 +8,10 @@ namespace ClassLibrary
     {
         protected static int currentElementID = 0;
 
-        protected int ElementID { get; private set; }
-        protected string ElementTitle { get; private set; }
-        protected string ElementSection { get; private set; }
-        protected bool ElementAvailability { get; set; }
+        public int ElementID { get; private set; }
+        public string ElementTitle { get; private set; }
+        public string ElementSection { get; private set; }
+        public bool ElementAvailability { get; set; }
 
         public LibraryCollectionElement(string title, string section)
         {
