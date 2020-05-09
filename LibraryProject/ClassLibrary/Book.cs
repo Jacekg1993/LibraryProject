@@ -4,7 +4,13 @@ using System.Text;
 
 namespace ClassLibrary
 {
-    class Book : LibraryCollectionElement
+    public class Book : LibraryCollectionElement
     {
+        public int PageAmount { get; private set; }
+   
+        public Book(string title, string section, int pageAmount) : base(title, section)
+        {
+            this.PageAmount = pageAmount;
+        }
     }
 }
