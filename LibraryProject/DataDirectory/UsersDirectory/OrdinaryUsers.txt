@@ -1,0 +1,13 @@
+
+0,Szymon,Gos,2
+1,Wojtek,Gos,4
+2,Szymon,Gos,1
+3,Wojtek,Gos,1
+4,Szymon,Gos,1
+5,Wojtek,Gos,1
+6,Szymon,Gos,1
+7,Wojtek,Gos,1
+8,Szymon,Gos,1
+9,Wojtek,Gos,1
+10,Maciek,Gos,2
+11,Miłosz,Gos,4

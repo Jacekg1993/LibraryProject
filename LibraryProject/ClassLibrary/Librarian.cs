@@ -6,6 +6,16 @@ namespace ClassLibrary
 {
     public class Librarian : User
     {
+        public Librarian() : base()
+        {
+
+        }
+
+        public Librarian(string name, string surname, byte type, int id) : base(name, surname, type, id)
+        {
+
+        }
+
         public void CreateNewAccount()
         {
 

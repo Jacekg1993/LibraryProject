@@ -1,0 +1,7 @@
+Books collection:
+Jacek,Gos,2
+0,Jacek,Gos,2
+0,Jacek,Gos,2
+Wiedzmin 3,fantasy,500
+metro 2033,fantasy,709
+metro 2033,fantasy,709
