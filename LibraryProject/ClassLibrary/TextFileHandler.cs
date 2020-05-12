@@ -18,7 +18,7 @@ namespace ClassLibrary
 
         static string usersDirectoryPath = @"D:\C#\ProjectLibrary\LibraryProject\DataDirectory\UsersDirectory";
         static string ordinaryUsersDirectoryPath = @"D:\C#\ProjectLibrary\LibraryProject\DataDirectory\UsersDirectory\OrdinaryUsersDirectory";        
-        static string librariansDirectoryPath = @"D:\C#\ProjectLibrary\LibraryProject\DataDirectory\UsersDirectory\librariansDirectory";
+        static string librariansDirectoryPath = @"D:\C#\ProjectLibrary\LibraryProject\DataDirectory\UsersDirectory\LibrariansDirectory";
 
         static List<string> booksFileLines = File.ReadAllLines(booksFilePath).ToList();
         static List<string> moviesFileLines = File.ReadAllLines(moviesFilePath).ToList();
@@ -116,12 +116,24 @@ namespace ClassLibrary
             return 0;
         }
 
-        public static void Replace()
+        public static void ClearData()
         {
             File.Create(booksFilePath);
             File.Create(moviesFilePath);
             File.Create(ordinaryUsersListPath);
             File.Create(librariansListPath);
+
+            DirectoryInfo dirOrdinaryUsers = new DirectoryInfo(ordinaryUsersDirectoryPath);
+            foreach (DirectoryInfo dir in dirOrdinaryUsers.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
+            DirectoryInfo dirLibrarians = new DirectoryInfo(librariansDirectoryPath);
+            foreach (DirectoryInfo dir in dirLibrarians.GetDirectories())
+            {
+                dir.Delete(true);
+            }
         }
 
         //public static void 

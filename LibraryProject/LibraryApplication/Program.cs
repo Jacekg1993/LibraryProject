@@ -12,6 +12,9 @@ namespace LibraryApplication
     {     
         static void Main(string[] args)
         {
+            TextFileHandler.ClearData();
+
+
             //List<Book> listbook = new List<Book>();
             //listbook.Add(TextFileHandler.CreateNewBook("metro 2033", "fantasy", 709));
             //listbook.Add(TextFileHandler.CreateNewBook("metro 2034", "fantasy", 109));
@@ -36,7 +39,6 @@ namespace LibraryApplication
             //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Mama", "Gos"));
             //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Tata", "Gos"));
 
-            TextFileHandler.Replace();
 
             Console.ReadKey();
         }
