@@ -6,18 +6,16 @@ namespace ClassLibrary
 {
     public abstract class LibraryCollectionElement
     {
-        protected static int currentElementID = 0;
-
         public int ElementID { get; private set; }
         public string ElementTitle { get; private set; }
         public string ElementSection { get; private set; }
         public bool ElementAvailability { get; set; }
 
-        public LibraryCollectionElement(string title, string section)
+        public LibraryCollectionElement(string title, string section, int ID)
         {
             this.ElementTitle = title;
             this.ElementSection = section;
-            this.ElementID = currentElementID++;
+            this.ElementID = ID;
             this.ElementAvailability = true;
         } 
     }

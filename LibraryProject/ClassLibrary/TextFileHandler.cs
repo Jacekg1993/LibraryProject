@@ -25,26 +25,32 @@ namespace ClassLibrary
         
         public static Book CreateNewBook(string title, string section, int pages)
         {
-            File.AppendAllText(booksFilePath, $"\n{title},{section},{pages}"); //Add new line to .txt file           
-            return new Book(title, section, pages);
+            File.AppendAllText(booksFilePath, $"{getCurrentBookID() + 1}, {title},{section},{pages}\n"); //Add new line to .txt file           
+            return new Book(title, section, getCurrentBookID() + 1, pages);
         }
 
-        public static OrdinaryUser CreateNewOrdinaryUser(string name, string surname, byte type)
+        public static Movie CreateNewMovie(string title, string section, int duration)
         {
-            OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, type, getCurrentOrdinaryUserID() + 1);
+            File.AppendAllText(moviesFilePath, $"{getCurrentMovieID() + 1},{title},{section},{duration}\n"); //Add new line to .txt file           
+            return new Movie(title, section, getCurrentMovieID() + 1, duration);
+        }
 
-            File.AppendAllText(ordinaryUsersListPath, $"\n{newOrdinaryUser.UserID},{name},{surname},{type}"); //Add new line to .txt file
+        public static OrdinaryUser CreateNewOrdinaryUser(string name, string surname)
+        {
+            OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, 2, getCurrentOrdinaryUserID() + 1);
+
+            File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2}\n"); //Add new line to .txt file
 
             CreateNewOrdinaryUserDataFiles(newOrdinaryUser);
 
             return newOrdinaryUser;
         }
 
-        public static Librarian CreateNewLibrarian(string name, string surname, byte type)
+        public static Librarian CreateNewLibrarian(string name, string surname)
         {
-            Librarian newLibrarian = new Librarian(name, surname, type, getCurrentLibrarianID() + 1);
+            Librarian newLibrarian = new Librarian(name, surname, 1, getCurrentLibrarianID() + 1);
 
-            File.AppendAllText(librariansListPath, $"\n{newLibrarian.UserID},{name},{surname},{type}"); //Add new line to .txt file
+            File.AppendAllText(librariansListPath, $"{newLibrarian.UserID},{name},{surname},{1}\n"); //Add new line to .txt file
 
             CreateNewLibrarianDataFiles(newLibrarian);
 
@@ -68,16 +74,54 @@ namespace ClassLibrary
 
         public static int getCurrentOrdinaryUserID()
         {
-            string lastLine = File.ReadLines(ordinaryUsersListPath).Last(); //Reading last line from .txt file
-            string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
-            return int.Parse(argumentsFromFile[0]);
+            string lastLine = File.ReadLines(ordinaryUsersListPath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromFile = lastLine.Split(',');
+                return int.Parse(argumentsFromFile[0]); 
+            }
+            return 0;
         }
 
         public static int getCurrentLibrarianID()
         {
-            string lastLine = File.ReadLines(librariansListPath).Last(); //Reading last line from .txt file
-            string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
-            return int.Parse(argumentsFromFile[0]);
+            string lastLine = File.ReadLines(librariansListPath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
+                return int.Parse(argumentsFromFile[0]); 
+            }
+            return 0;
+        }
+
+        public static int getCurrentBookID()
+        {
+            string lastLine = File.ReadLines(booksFilePath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
+                return int.Parse(argumentsFromFile[0]);
+            }           
+            return 0;
+        }
+
+        public static int getCurrentMovieID()
+        {
+            string lastLine = File.ReadLines(moviesFilePath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
+                return int.Parse(argumentsFromFile[0]);
+            }
+            return 0;
+        }
+
+        public static void Replace()
+        {
+            File.Create(booksFilePath);
+            File.Create(moviesFilePath);
+            File.Create(ordinaryUsersListPath);
+            File.Create(librariansListPath);
         }
 
         //public static void 

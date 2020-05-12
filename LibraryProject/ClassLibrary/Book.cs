@@ -8,7 +8,7 @@ namespace ClassLibrary
     {
         public int PageAmount { get; private set; }
    
-        public Book(string title, string section, int pageAmount) : base(title, section)
+        public Book(string title, string section, int ID, int pageAmount ) : base(title, section, ID)
         {
             this.PageAmount = pageAmount;
         }

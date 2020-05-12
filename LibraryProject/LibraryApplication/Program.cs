@@ -14,15 +14,29 @@ namespace LibraryApplication
         {
             //List<Book> listbook = new List<Book>();
             //listbook.Add(TextFileHandler.CreateNewBook("metro 2033", "fantasy", 709));
+            //listbook.Add(TextFileHandler.CreateNewBook("metro 2034", "fantasy", 109));
+            //listbook.Add(TextFileHandler.CreateNewBook("metro 2035", "fantasy", 79));
+            //listbook.Add(TextFileHandler.CreateNewBook("metro 2036", "fantasy", 809));
 
+            //List<Movie> listmovie = new List<Movie>();
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny", "kryminalny", 60));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny2", "kryminalny", 602));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny3", "kryminalny", 603));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny4", "kryminalny", 75));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny5", "kryminalny", 890));
 
             //List<OrdinaryUser> listusers = new List<OrdinaryUser>();
-            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Maciek", "Gos", 2));
-            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Miłosz", "Gos", 4));
+            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Jacek", "Gos"));
+            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Szymon", "Gos"));
+            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Łukasz", "Gos"));
+            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Wojciech", "Gos"));
+            //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Dominik", "Gos"));
 
-            List<Librarian> listlibrarians = new List<Librarian>();
-            listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Dominik", "Gos", 1));
-            listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Łukasz", "Gos", 1));
+            //List<Librarian> listlibrarians = new List<Librarian>();
+            //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Mama", "Gos"));
+            //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Tata", "Gos"));
+
+            TextFileHandler.Replace();
 
             Console.ReadKey();
         }
