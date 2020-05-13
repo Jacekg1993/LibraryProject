@@ -6,8 +6,7 @@ using System.Linq;
 
 
 namespace ClassLibrary
-{
-    
+{    
     public static class TextFileHandler
     {
         static string booksFilePath = @"D:\C#\ProjectLibrary\LibraryProject\DataDirectory\LibraryElementsDirectory\Books.txt";
