@@ -16,7 +16,7 @@ namespace ClassLibrary
             this.UserBorrowings.Clear(); // Pozniej do zmiany, poniewaz Borrowings beda sie znajdowac rowniez w pliku.txt i tam tez trzeba to usunac
         }
 
-        public OrdinaryUser(string name, string surname, byte type, int id) : base(name, surname, type, id)
+        public OrdinaryUser(string name, string surname, byte type, int id, string password) : base(name, surname, type, id, password)
         {
 
         }

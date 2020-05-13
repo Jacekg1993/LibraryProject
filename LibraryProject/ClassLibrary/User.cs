@@ -6,6 +6,7 @@ namespace ClassLibrary
 {
     public abstract class User
     {
+        private string password;
         public int UserID { get; private set; }
         public string Name { get; private set; }
         public string SurName { get; private set; }       
@@ -18,7 +19,7 @@ namespace ClassLibrary
             }
             private set
             {
-                this.Password = value;
+                this.password = value;
             }
         }
         

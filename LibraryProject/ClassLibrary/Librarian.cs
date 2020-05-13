@@ -11,7 +11,7 @@ namespace ClassLibrary
 
         }
 
-        public Librarian(string name, string surname, byte type, int id) : base(name, surname, type, id)
+        public Librarian(string name, string surname, byte type, int id, string password) : base(name, surname, type, id, password)
         {
 
         }

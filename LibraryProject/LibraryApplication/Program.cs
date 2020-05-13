@@ -12,7 +12,7 @@ namespace LibraryApplication
     {     
         static void Main(string[] args)
         {
-            TextFileHandler.ClearData();
+            //TextFileHandler.ClearData();
 
 
             //List<Book> listbook = new List<Book>();
@@ -36,9 +36,10 @@ namespace LibraryApplication
             //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Dominik", "Gos", "a"));
 
             //List<Librarian> listlibrarians = new List<Librarian>();
-            //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Mama", "Gos", "a"));
+            //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Jacek", "Gos", "a"));
             //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Tata", "Gos", "a"));
 
+            Menu.LogInView();
 
             Console.ReadKey();
         }

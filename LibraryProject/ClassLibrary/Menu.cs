@@ -8,9 +8,23 @@ namespace ClassLibrary
     {
         public static void LogInView()
         {
+            Console.WriteLine("Witaj! Zaloguj sie na konto");
+            LogIn();
+           
+        }
+
+        public static void LogIn()
+        {
             string login;
             string password;
-            Console.WriteLine("Witaj! Zaloguj sie na konto");
+
+            Console.Write("Login: ");
+            login = Console.ReadLine();
+
+            Console.Write("Password: ");
+            password = Console.ReadLine();
+
+            Console.WriteLine(TextFileHandler.LogInValidation(login, password));
 
         }
     }
