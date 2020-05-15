@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 
 namespace LibraryApplication
-{  
+{
     class Program
-    {     
+    {
+        public List<Librarian> LibrarianList = new List<Librarian>();
+
         static void Main(string[] args)
         {
             //TextFileHandler.ClearData();

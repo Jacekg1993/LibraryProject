@@ -40,7 +40,7 @@ namespace ClassLibrary
         {
             OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, 2, getCurrentOrdinaryUserID() + 1, password);
 
-            File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2},User{newOrdinaryUser.UserID},{password}\n"); //Add new line to .txt file
+            File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2}\n"); //Add new line to .txt file
             File.AppendAllText(accountsInfoPath, $"User{newOrdinaryUser.UserID},{password},{newOrdinaryUser.UserType},{newOrdinaryUser.UserID}\n");
 
             CreateNewOrdinaryUserDataFiles(newOrdinaryUser);
@@ -52,7 +52,7 @@ namespace ClassLibrary
         {
             Librarian newLibrarian = new Librarian(name, surname, 1, getCurrentLibrarianID() + 1, password);
 
-            File.AppendAllText(librariansListPath, $"{newLibrarian.UserID},{name},{surname},{1},Librarian{newLibrarian.UserID},{password}\n"); //Add new line to .txt file
+            File.AppendAllText(librariansListPath, $"{newLibrarian.UserID},{name},{surname},{1}\n"); //Add new line to .txt file
             File.AppendAllText(accountsInfoPath, $"Librarian{newLibrarian.UserID},{password},{newLibrarian.UserType},{newLibrarian.UserID}\n");
 
             CreateNewLibrarianDataFiles(newLibrarian);
@@ -97,6 +97,14 @@ namespace ClassLibrary
             return 0;
         }
 
+        public static string GetLibrarianDataFromFile(int librarianID)
+        {
+            string[] lines = File.ReadAllLines(librariansListPath);
+            string librarianData = lines[librarianID - 1];    
+            
+            return librarianData;
+        }
+
         public static int getCurrentBookID()
         {
             string lastLine = File.ReadLines(booksFilePath).LastOrDefault(); //Reading last line from .txt file
@@ -119,7 +127,7 @@ namespace ClassLibrary
             return 0;
         }
 
-        public static bool LogInValidation(string login, string password)
+        public static int GetLibrarianIdIfExist(string login, string password)
         {
             string[] lines = File.ReadAllLines(accountsInfoPath);
             foreach (string line in lines)
@@ -127,11 +135,12 @@ namespace ClassLibrary
                 string[] parts = line.Split(',');
                 if (parts[0] == login && parts[1] == password)
                 {
-                    return true;
+                    return int.Parse(parts[3]);
                 }
             }
-            return false;
+            return -1;
         }
+
 
         public static void ClearData()
         {

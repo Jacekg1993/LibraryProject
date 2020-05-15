@@ -1,5 +1,0 @@
-1,Ojciec chrzestny,kryminalny,60
-2,Ojciec chrzestny2,kryminalny,602
-3,Ojciec chrzestny3,kryminalny,603
-4,Ojciec chrzestny4,kryminalny,75
-5,Ojciec chrzestny5,kryminalny,890

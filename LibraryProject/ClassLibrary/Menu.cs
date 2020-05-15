@@ -8,13 +8,23 @@ namespace ClassLibrary
     {
         public static void LogInView()
         {
+            Librarian LoggedLibrarian;
+            string userData;
+            string[] userArguments;
+
             Console.WriteLine("Witaj! Zaloguj sie na konto");
-            LogIn();
-           
+            userData = GetUserData();
+            userArguments = userData.Split(',');
+
+            LoggedLibrarian = new Librarian(userArguments[1], userArguments[2], byte.Parse(userArguments[3]), int.Parse(userArguments[0]), userArguments[4]);
+
+            Console.WriteLine(LoggedLibrarian.UserType);
+            Console.ReadKey();
         }
 
-        public static void LogIn()
+        public static string GetUserData()
         {
+            string userData;
             string login;
             string password;
 
@@ -24,8 +34,14 @@ namespace ClassLibrary
             Console.Write("Password: ");
             password = Console.ReadLine();
 
-            Console.WriteLine(TextFileHandler.LogInValidation(login, password));
+            int LibrarianId = TextFileHandler.GetLibrarianIdIfExist(login, password);
 
+            if ( LibrarianId != -1)
+            {
+                userData = TextFileHandler.GetLibrarianDataFromFile(LibrarianId);
+                return userData + $",{password}";
+            }
+            return null;
         }
     }
 }
