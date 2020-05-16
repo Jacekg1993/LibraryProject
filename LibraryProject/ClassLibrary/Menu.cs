@@ -71,6 +71,9 @@ namespace ClassLibrary
 
         public static void LibrarianMenuView()
         {
+            int librarianMenuSelectedOptionInt = 0;
+            LibrarianMenuOption librarianMenuSelectedOption;
+
             Console.Clear();
 
             Console.WriteLine("1. Stwórz nowe konto");
@@ -83,6 +86,22 @@ namespace ClassLibrary
             Console.WriteLine("8. Zatwierdź wypożyczenie");
             Console.WriteLine("9. Zatwierdź zwrócenie");
             Console.WriteLine("10. Wyloguj");
+
+            while (true)
+            {
+                Console.Write("Wybierz opcje: ");
+                librarianMenuSelectedOptionInt = int.Parse(Console.ReadLine());
+
+                if (librarianMenuSelectedOptionInt > 0 && librarianMenuSelectedOptionInt < 10)
+                {
+                    librarianMenuSelectedOption = (LibrarianMenuOption)librarianMenuSelectedOptionInt;
+                    LibrarianMenuOptionSelection(librarianMenuSelectedOption);
+                }
+                else if (librarianMenuSelectedOptionInt == 10)
+                {
+                    break;
+                }
+            }
         }
 
         public static void LibrarianMenuOptionSelection(LibrarianMenuOption option)
