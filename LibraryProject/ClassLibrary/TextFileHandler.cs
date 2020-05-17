@@ -62,11 +62,11 @@ namespace ClassLibrary
         {
             OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, 2, getCurrentOrdinaryUserID() + 1, password);
 
-            File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2}\n"); //Add new line to .txt file
+            File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2},0\n"); //Add new line to .txt file
             File.AppendAllText(accountsInfoPath, $"User{newOrdinaryUser.UserID},{password},{newOrdinaryUser.UserType},{newOrdinaryUser.UserID}\n");
 
             CreateNewOrdinaryUserDataFiles(newOrdinaryUser);
-
+         
             return newOrdinaryUser;
         }
 
@@ -87,6 +87,24 @@ namespace ClassLibrary
                 return int.Parse(argumentsFromFile[0]);
             }
             return 0;
+        }
+
+        public static string GetOrdinaryUserDataFromFile(int ordinaryUserID)
+        {
+            string[] lines = File.ReadAllLines(ordinaryUsersListPath);
+            string ordinaryUserData;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] arguments = lines[i].Split(',');
+                if (arguments[0] == $"{ordinaryUserID}")
+                {
+                    ordinaryUserData = lines[i];
+                    return ordinaryUserData;
+                }
+            }
+
+            return null;
         }
 
         public static Librarian CreateNewLibrarian(string name, string surname, string password)
@@ -137,7 +155,7 @@ namespace ClassLibrary
             return null;
         }
 
-        public static int GetLibrarianIdIfExist(string login, string password)
+        public static int GetUserIdIfExist(string login, string password)
         {
             string[] lines = File.ReadAllLines(accountsInfoPath);
             foreach (string line in lines)

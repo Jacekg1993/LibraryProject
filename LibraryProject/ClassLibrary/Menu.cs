@@ -22,25 +22,39 @@ namespace ClassLibrary
     {
         public static void LogInView()
         {
+            Console.Clear();
+
             Librarian LoggedLibrarian;
+            OrdinaryUser LoggedOrdinaryUser;
+
             string userData = null;
             string[] userArguments;
-            int c = 0;
+
             while (userData == null)
             {
                 userData = GetUserDataByEnteringPasses();
             }
             userArguments = userData.Split(',');
 
-            LoggedLibrarian = new Librarian(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[4]);
+            if (byte.Parse(userArguments[3]) == 1)
+            {
+                LoggedLibrarian = new Librarian(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[4]);
 
-            Console.Clear();
+                Console.Clear();
+                Console.WriteLine($"Witaj {LoggedLibrarian.Name}!");
+                Console.Write("kliknij aby kontynuować");
+                Console.ReadKey();
+                LibrarianMenuView();
+            }
+            else if(byte.Parse(userArguments[3]) == 2)
+            {
+                LoggedOrdinaryUser = new OrdinaryUser(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[4]);
 
-            Console.WriteLine($"Witaj {LoggedLibrarian.Name}!");
-
-            Console.Write("kliknij aby kontynuować");
-
-            LibrarianMenuView();
+                Console.Clear();
+                Console.WriteLine($"Witaj {LoggedOrdinaryUser.Name}!");
+                Console.Write("kliknij aby kontynuować");
+                Console.ReadKey();
+            }             
         }
 
         public static string GetUserDataByEnteringPasses()
@@ -59,13 +73,26 @@ namespace ClassLibrary
             Console.Write("Password: ");
             password = Console.ReadLine();
 
-            int LibrarianId = TextFileHandler.GetLibrarianIdIfExist(login, password);
+            int UserId = TextFileHandler.GetUserIdIfExist(login, password);
 
-            if ( LibrarianId > -1)
+            if (UserId > -1)
             {
-                userData = TextFileHandler.GetLibrarianDataFromFile(LibrarianId);
-                return userData + $",{password}";
+                if (login.Contains("Librarian"))
+                {
+                    Console.WriteLine("Librarian");
+                    Console.ReadKey();
+                    userData = TextFileHandler.GetLibrarianDataFromFile(UserId);
+                    return userData + $",{password}";
+                }
+                else if (login.Contains("User"))
+                {
+                    Console.WriteLine("User");
+                    Console.ReadKey();
+                    userData = TextFileHandler.GetOrdinaryUserDataFromFile(UserId);
+                    return userData + $",{password}";
+                }
             }
+           
             return null;
         }
 
@@ -74,21 +101,21 @@ namespace ClassLibrary
             int librarianMenuSelectedOptionInt = 0;
             LibrarianMenuOption librarianMenuSelectedOption;
 
-            Console.Clear();
-
-            Console.WriteLine("1. Stwórz nowe konto");
-            Console.WriteLine("2. Usuń konto");
-            Console.WriteLine("3. Lista użytkowników");
-            Console.WriteLine("4. Lista elementów biblioteki");
-            Console.WriteLine("5. Wyszukaj element");
-            Console.WriteLine("6. Dodaj element");
-            Console.WriteLine("7. Usuń element");
-            Console.WriteLine("8. Zatwierdź wypożyczenie");
-            Console.WriteLine("9. Zatwierdź zwrócenie");
-            Console.WriteLine("10. Wyloguj");
-
             while (true)
             {
+                Console.Clear();
+
+                Console.WriteLine("1. Stwórz nowe konto");
+                Console.WriteLine("2. Usuń konto");
+                Console.WriteLine("3. Lista użytkowników");
+                Console.WriteLine("4. Lista elementów biblioteki");
+                Console.WriteLine("5. Wyszukaj element");
+                Console.WriteLine("6. Dodaj element");
+                Console.WriteLine("7. Usuń element");
+                Console.WriteLine("8. Zatwierdź wypożyczenie");
+                Console.WriteLine("9. Zatwierdź zwrócenie");
+                Console.WriteLine("10. Wyloguj");
+
                 Console.Write("Wybierz opcje: ");
                 librarianMenuSelectedOptionInt = int.Parse(Console.ReadLine());
 
@@ -99,8 +126,8 @@ namespace ClassLibrary
                 }
                 else if (librarianMenuSelectedOptionInt == 10)
                 {
-                    break;
-                }
+                    LogInView();
+                } 
             }
         }
 
@@ -109,6 +136,7 @@ namespace ClassLibrary
             switch (option)
             {
                 case LibrarianMenuOption.CreateNewAccount:
+                    CreateNewUser();
                     break;
                 case LibrarianMenuOption.RemoveAccount:
                     break;
@@ -127,9 +155,49 @@ namespace ClassLibrary
                 case LibrarianMenuOption.ApproveReturn:
                     break;
                 case LibrarianMenuOption.LogOut:
+                    
                     break;
                 default:
                     break;
+            }
+        }
+
+        public static void CreateNewUser()
+        {
+            byte type;
+
+            Console.Clear();
+            Console.WriteLine("Ekran tworzenia użytkownika");
+            Console.WriteLine("___________________________");
+            Console.Write("Podaj typ użytkownika:\nBibliotekarz: 1\nZwykły użytkownik: 2\n");
+
+            type = byte.Parse(Console.ReadLine());
+            if (type == 1)
+            {
+                //TextFileHandler.CreateNewLibrarian();
+            }
+            else if (type == 2)
+            {
+                string name;
+                string surName;
+                string password;
+
+                Console.Write("Imie: ");
+                name = Console.ReadLine();
+
+                Console.Write("Nazwisko: ");
+                surName = Console.ReadLine();
+
+                Console.Write("Hasło: ");
+                password = Console.ReadLine();
+
+                TextFileHandler.CreateNewOrdinaryUser(name, surName, password);
+            }
+            else
+            {
+                Console.WriteLine("Podano zły typ użytkownika!");
+                Console.ReadKey();
+                CreateNewUser();
             }
         }
     }

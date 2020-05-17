@@ -18,7 +18,7 @@ namespace ClassLibrary
 
         public OrdinaryUser(string name, string surname, byte type, int id, string password) : base(name, surname, type, id, password)
         {
-
+            this.Penalty = 0;
         }
 
         public void BorrowLibraryElement(DateTime date, ushort elementID)
