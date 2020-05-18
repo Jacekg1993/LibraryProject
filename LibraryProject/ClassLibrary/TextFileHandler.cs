@@ -63,7 +63,7 @@ namespace ClassLibrary
             OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, 2, getCurrentOrdinaryUserID() + 1, password);
 
             File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2},0\n"); //Add new line to .txt file
-            File.AppendAllText(accountsInfoPath, $"User{newOrdinaryUser.UserID},{password},{newOrdinaryUser.UserType},{newOrdinaryUser.UserID}\n");
+            File.AppendAllText(accountsInfoPath, $"OrdinaryUser{newOrdinaryUser.UserID},{password},{newOrdinaryUser.UserType},{newOrdinaryUser.UserID}\n");
 
             CreateNewOrdinaryUserDataFiles(newOrdinaryUser);
          
@@ -72,10 +72,10 @@ namespace ClassLibrary
 
         public static void CreateNewOrdinaryUserDataFiles(OrdinaryUser newOrdinaryUser)
         {
-            string newOrdinaryUsersDirectory = ordinaryUsersDirectoryPath + @"\OrdinaryUser_" + newOrdinaryUser.UserID;
+            string newOrdinaryUsersDirectory = ordinaryUsersDirectoryPath + @"\OrdinaryUser" + newOrdinaryUser.UserID;
 
             Directory.CreateDirectory(newOrdinaryUsersDirectory);
-            File.Create(newOrdinaryUsersDirectory + @"\Borrowings_OrdinaryUser_" + newOrdinaryUser.UserID + ".txt");
+            File.Create(newOrdinaryUsersDirectory + @"\Borrowings_OrdinaryUser" + newOrdinaryUser.UserID + ".txt");
         }
 
         public static int getCurrentOrdinaryUserID()
@@ -121,7 +121,7 @@ namespace ClassLibrary
         
         public static void CreateNewLibrarianDataFiles(Librarian newLibrarian)
         {
-            string newLibrariansDirectory = librariansDirectoryPath + @"\Librarian_" + newLibrarian.UserID;
+            string newLibrariansDirectory = librariansDirectoryPath + @"\Librarian" + newLibrarian.UserID;
 
             Directory.CreateDirectory(newLibrariansDirectory);
         }
@@ -167,6 +167,142 @@ namespace ClassLibrary
                 }
             }
             return -1;
+        }
+
+        public static bool RemoveOrdinaryUserDataFromFile(int ordinaryUserID, string OrdinaryUserAccountName)
+        {
+            List<string> ordinaryUserList = File.ReadAllLines(ordinaryUsersListPath).ToList();
+            List<string> UserAccountDataList = File.ReadAllLines(accountsInfoPath).ToList();
+
+            int indexToRemove1;
+            int indexToRemove2;
+
+            indexToRemove1 = FindOrdinaryUserIndexToRemove(ordinaryUserList, ordinaryUserID);
+            indexToRemove2 = FindUserAccountListIndexToRemove(UserAccountDataList, OrdinaryUserAccountName);
+
+            if (indexToRemove1 > -1 && indexToRemove2 > -1 && RemoveOrdinaryUserDirectories(OrdinaryUserAccountName))
+            {
+                ordinaryUserList.RemoveAt(indexToRemove1);
+                File.WriteAllLines(ordinaryUsersListPath, ordinaryUserList);
+
+                UserAccountDataList.RemoveAt(indexToRemove2);
+                File.WriteAllLines(accountsInfoPath, UserAccountDataList);
+
+                return true;
+            }
+            return false;
+        }
+
+        public static int FindOrdinaryUserIndexToRemove(List<string> ordinaryUserList, int ordinaryUserID)
+        {
+            string[] ordinaryUserDataTmp;
+
+            for (int i = 0; i < ordinaryUserList.Count; i++)
+            {
+                ordinaryUserDataTmp = ordinaryUserList[i].Split(',');
+
+                if (int.Parse(ordinaryUserDataTmp[0]) == ordinaryUserID)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public static int FindUserAccountListIndexToRemove(List<string> UserAccountDataList, string OrdinaryUserAccountName)
+        {
+            string[] UserDataTmp;
+
+            for (int i = 0; i < UserAccountDataList.Count; i++)
+            {
+                UserDataTmp = UserAccountDataList[i].Split(',');
+
+                if (UserDataTmp[0] == OrdinaryUserAccountName)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public static bool RemoveOrdinaryUserDirectories(string OrdinaryUserAccountName)
+        {
+            string newOrdinaryUsersDirectory = ordinaryUsersDirectoryPath + @"\" + OrdinaryUserAccountName;
+
+            if (Directory.Exists(newOrdinaryUsersDirectory))
+            {
+                Directory.Delete(newOrdinaryUsersDirectory, true);
+                return true;
+            }
+            return false;           
+        }
+
+        public static string GetLibrarianListFromFile()
+        {
+            List<string> librarianListFromFile = File.ReadAllLines(librariansListPath).ToList();
+            string[] librarianSeparatedData;
+
+            StringBuilder librarianList = new System.Text.StringBuilder();
+            librarianList.AppendLine("ID\t|Imię\t|Nazwisko");
+
+            foreach (string line in librarianListFromFile)
+            {
+                librarianSeparatedData = line.Split(',');
+                librarianList.AppendLine($"{librarianSeparatedData[0]}\t|{librarianSeparatedData[1]}\t|{librarianSeparatedData[2]}");
+            }
+
+            return librarianList.ToString();
+        }
+
+        public static string GetOrdinaryUserListFromFile()
+        {
+            List<string> ordinaryUserListFromFile = File.ReadAllLines(ordinaryUsersListPath).ToList();
+            string[] ordinaryUserSeparatedData;
+
+            StringBuilder ordinaryUserList = new System.Text.StringBuilder();
+            ordinaryUserList.AppendLine("ID\t|Imię\t|Nazwisko\t|Naliczone kary [zł]");
+
+            foreach (string line in ordinaryUserListFromFile)
+            {
+                ordinaryUserSeparatedData = line.Split(',');
+                ordinaryUserList.AppendLine($"{ordinaryUserSeparatedData[0]}\t|{ordinaryUserSeparatedData[1]}\t|{ordinaryUserSeparatedData[2]}\t|{ordinaryUserSeparatedData[4]}");
+            }
+
+            return ordinaryUserList.ToString();
+        }
+
+        public static string GetBooksListFromFile()
+        {
+            List<string> booksListFromFile = File.ReadAllLines(booksFilePath).ToList();
+            string[] bookSeparatedData;
+
+            StringBuilder bookList = new System.Text.StringBuilder();
+            bookList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Ilość stron");
+
+            foreach (string line in booksListFromFile)
+            {
+                bookSeparatedData = line.Split(',');
+                bookList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}\t|{bookSeparatedData[3]}");
+            }
+
+            return bookList.ToString();
+        }
+
+        public static string GetMoviesListFromFile()
+        {
+            List<string> moviesListFromFile = File.ReadAllLines(moviesFilePath).ToList();
+            string[] movieSeparatedData;
+
+            StringBuilder movieList = new System.Text.StringBuilder();
+            movieList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Czas trwania");
+
+            foreach (string line in moviesListFromFile)
+            {
+                movieSeparatedData = line.Split(',');
+                movieList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}\t|{movieSeparatedData[3]}");
+            }
+
+            return movieList.ToString();
         }
 
         public static void ClearData()

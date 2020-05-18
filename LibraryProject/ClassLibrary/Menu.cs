@@ -8,11 +8,11 @@ namespace ClassLibrary
     {
         CreateNewAccount = 1,
         RemoveAccount,
+        AddNewLibraryElement,
+        RemoveLibraryElement,
         GetUsersList,
         GetLibrarianElementsList,
         SearchLibraryElement,
-        AddNewLibraryElement,
-        RemoveLibraryElement,
         ApproveBorrow,
         ApproveReturn,
         LogOut
@@ -79,15 +79,11 @@ namespace ClassLibrary
             {
                 if (login.Contains("Librarian"))
                 {
-                    Console.WriteLine("Librarian");
-                    Console.ReadKey();
                     userData = TextFileHandler.GetLibrarianDataFromFile(UserId);
                     return userData + $",{password}";
                 }
                 else if (login.Contains("User"))
                 {
-                    Console.WriteLine("User");
-                    Console.ReadKey();
                     userData = TextFileHandler.GetOrdinaryUserDataFromFile(UserId);
                     return userData + $",{password}";
                 }
@@ -107,11 +103,11 @@ namespace ClassLibrary
 
                 Console.WriteLine("1. Stwórz nowe konto");
                 Console.WriteLine("2. Usuń konto");
-                Console.WriteLine("3. Lista użytkowników");
-                Console.WriteLine("4. Lista elementów biblioteki");
-                Console.WriteLine("5. Wyszukaj element");
-                Console.WriteLine("6. Dodaj element");
-                Console.WriteLine("7. Usuń element");
+                Console.WriteLine("3. Dodaj nowy element do zbioru");
+                Console.WriteLine("4. Usuń element zbioru");
+                Console.WriteLine("5. Lista użytkowników");
+                Console.WriteLine("6. Lista elementów w zbiorze");
+                Console.WriteLine("7. Wyszukawiarka elementów w zbiorze");
                 Console.WriteLine("8. Zatwierdź wypożyczenie");
                 Console.WriteLine("9. Zatwierdź zwrócenie");
                 Console.WriteLine("10. Wyloguj");
@@ -139,16 +135,21 @@ namespace ClassLibrary
                     CreateNewUser();
                     break;
                 case LibrarianMenuOption.RemoveAccount:
-                    break;
-                case LibrarianMenuOption.GetUsersList:
-                    break;
-                case LibrarianMenuOption.GetLibrarianElementsList:
-                    break;
-                case LibrarianMenuOption.SearchLibraryElement:
+                    RemoveUser();
                     break;
                 case LibrarianMenuOption.AddNewLibraryElement:
+                    
                     break;
                 case LibrarianMenuOption.RemoveLibraryElement:
+                    
+                    break;
+                case LibrarianMenuOption.GetUsersList:
+                    GetAllUsersList();
+                    break;
+                case LibrarianMenuOption.GetLibrarianElementsList:
+                    GetAllLibraryElementsList();
+                    break;
+                case LibrarianMenuOption.SearchLibraryElement:
                     break;
                 case LibrarianMenuOption.ApproveBorrow:
                     break;
@@ -169,12 +170,16 @@ namespace ClassLibrary
             Console.Clear();
             Console.WriteLine("Ekran tworzenia użytkownika");
             Console.WriteLine("___________________________");
-            Console.Write("Podaj typ użytkownika:\nBibliotekarz: 1\nZwykły użytkownik: 2\n");
 
+            Console.Write("Podaj typ użytkownika:\nBibliotekarz: 1\nZwykły użytkownik: 2\n");
             type = byte.Parse(Console.ReadLine());
+
             if (type == 1)
             {
-                //TextFileHandler.CreateNewLibrarian();
+                //TextFileHandler.CreateNewLibrarian(); 
+                Console.WriteLine("Opcja chwilowo niedostępna");
+
+                Console.ReadKey();
             }
             else if (type == 2)
             {
@@ -199,6 +204,96 @@ namespace ClassLibrary
                 Console.ReadKey();
                 CreateNewUser();
             }
+        }
+
+        public static void RemoveUser()
+        {
+            string userToDeleteLogin;
+            string[] userDataSplit;
+            int userToDeleteId;
+
+            Console.Clear();
+
+            Console.WriteLine("Ekran usuwania użytkownika");
+            Console.WriteLine("___________________________");
+
+            Console.Write("Podaj nazwe użytkownika do usunięcia: ");
+            userToDeleteLogin = Console.ReadLine();
+
+            userDataSplit = userToDeleteLogin.Split('r');
+            userToDeleteId = int.Parse(userDataSplit[3]);
+
+            if (TextFileHandler.RemoveOrdinaryUserDataFromFile(userToDeleteId, userToDeleteLogin))
+            {
+                Console.WriteLine("Konto usunięto pomyślnie");
+            }
+            else
+            {
+                Console.WriteLine("Coś poszło nie tak");
+            }
+
+            Console.ReadKey();
+        }
+
+        public static void AddNewLibraryElement()
+        {
+            byte type;
+
+            Console.Clear();
+            Console.WriteLine("Ekran dodawania nowego elementu do zbioru");
+            Console.WriteLine("___________________________");
+
+            Console.Write("Podaj typ elementu:\nKsiążka: 1\nFilm: 2\n");
+            type = byte.Parse(Console.ReadLine());
+
+            if (type == 1)
+            {
+
+            }
+            else if (type == 2)
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("Podano zły typ elementu!");
+                Console.ReadKey();
+                AddNewLibraryElement();
+            }
+        }
+
+        public static void GetAllUsersList()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Lista pracowników biblioteki: ");
+            Console.WriteLine("______________________________________________________");
+            Console.WriteLine(TextFileHandler.GetLibrarianListFromFile());
+
+            Console.WriteLine("Lista użytkowników biblioteki: ");
+            Console.WriteLine("______________________________________________________");
+            Console.WriteLine(TextFileHandler.GetOrdinaryUserListFromFile());
+
+            Console.WriteLine("Powrót");
+
+            Console.ReadKey();
+        }
+
+        public static void GetAllLibraryElementsList()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Lista książek w zbiorze: ");
+            Console.WriteLine("______________________________________________________");
+            Console.WriteLine(TextFileHandler.GetBooksListFromFile());
+
+            Console.WriteLine("Lista filmów w zbiorze: ");
+            Console.WriteLine("______________________________________________________");
+            Console.WriteLine(TextFileHandler.GetMoviesListFromFile());
+
+            Console.WriteLine("Powrót");
+
+            Console.ReadKey();
         }
     }
 }
