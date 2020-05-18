@@ -2,3 +2,4 @@
 2,Domino,Gos,2,0
 3,Łukaszek,Gos,2,0
 4,Bonifacy,Nowak,2,0
+5,Marek,Kowalski,2,0

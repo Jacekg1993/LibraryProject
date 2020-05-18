@@ -138,7 +138,7 @@ namespace ClassLibrary
                     RemoveUser();
                     break;
                 case LibrarianMenuOption.AddNewLibraryElement:
-                    
+                    AddNewLibraryElement();
                     break;
                 case LibrarianMenuOption.RemoveLibraryElement:
                     
@@ -197,6 +197,9 @@ namespace ClassLibrary
                 password = Console.ReadLine();
 
                 TextFileHandler.CreateNewOrdinaryUser(name, surName, password);
+
+                Console.WriteLine("Nowy użytkownik dodany pomyślnie");
+                Console.ReadKey();
             }
             else
             {
@@ -248,11 +251,43 @@ namespace ClassLibrary
 
             if (type == 1)
             {
+                string title;
+                string section;
+                int pages;
 
+                Console.Write("Tytuł: ");
+                title = Console.ReadLine();
+
+                Console.Write("Rodzaj: ");
+                section = Console.ReadLine();
+
+                Console.Write("Ilość stron: ");
+                pages = int.Parse(Console.ReadLine());
+
+                TextFileHandler.CreateNewBook(title, section, pages);
+
+                Console.WriteLine("Element dodano pomyślnie");
+                Console.ReadKey();
             }
             else if (type == 2)
             {
+                string title;
+                string section;
+                int duration;
 
+                Console.Write("Tytuł: ");
+                title = Console.ReadLine();
+
+                Console.Write("Rodzaj: ");
+                section = Console.ReadLine();
+
+                Console.Write("Czas trwania [minuty]: ");
+                duration = int.Parse(Console.ReadLine());
+
+                TextFileHandler.CreateNewMovie(title, section, duration);
+
+                Console.WriteLine("Element dodano pomyślnie");
+                Console.ReadKey();
             }
             else
             {

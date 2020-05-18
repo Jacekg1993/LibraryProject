@@ -2,3 +2,5 @@
 2, metro 2034,fantasy,109
 3, metro 2035,fantasy,79
 4, Władca pierścieni,fantasy,1029
+5, Władca pierścieni 3,fantasy,501
+6, Matrix,Sci-fi,300
