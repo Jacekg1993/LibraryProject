@@ -41,9 +41,8 @@ namespace LibraryApplication
 
             Menu.LogInView();
 
-            //Console.WriteLine(TextFileHandler.GetMoviesListFromFile());
-            //Console.WriteLine();
-            //Console.WriteLine(TextFileHandler.GetBooksListFromFile());
+            //Console.WriteLine(TextFileHandler.SearchBook("adca"));
+            //Console.WriteLine(TextFileHandler.SearchMovie("adca"));
 
             Console.ReadKey();
         }

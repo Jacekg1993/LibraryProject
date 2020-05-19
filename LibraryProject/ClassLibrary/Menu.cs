@@ -141,7 +141,7 @@ namespace ClassLibrary
                     AddNewLibraryElement();
                     break;
                 case LibrarianMenuOption.RemoveLibraryElement:
-                    
+                    RemoveLibraryElement();
                     break;
                 case LibrarianMenuOption.GetUsersList:
                     GetAllUsersList();
@@ -150,6 +150,7 @@ namespace ClassLibrary
                     GetAllLibraryElementsList();
                     break;
                 case LibrarianMenuOption.SearchLibraryElement:
+                    SearchLibraryElement();
                     break;
                 case LibrarianMenuOption.ApproveBorrow:
                     break;
@@ -297,6 +298,58 @@ namespace ClassLibrary
             }
         }
 
+        public static void RemoveLibraryElement()
+        {
+            byte type;
+            int id;
+
+            Console.Clear();
+            Console.WriteLine("Ekran usuwanie elementu zbioru");
+            Console.WriteLine("___________________________");
+
+            Console.Write("Podaj typ elementu:\nKsiążka: 1\nFilm: 2\n");
+            type = byte.Parse(Console.ReadLine());
+
+            if (type == 1)
+            {
+                Console.Write("Podaj ID książki: ");
+                id = int.Parse(Console.ReadLine());
+
+                if (TextFileHandler.RemoveBook(id))
+                {
+                    Console.WriteLine("Książkę usunięto ze zbioru");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.WriteLine("Coś poszło nie tak");
+                    Console.ReadKey();
+                }
+            }
+            else if (type == 2)
+            {
+                Console.Write("Podaj ID filmu: ");
+                id = int.Parse(Console.ReadLine());
+               
+                if (TextFileHandler.RemoveMovie(id))
+                {
+                    Console.WriteLine("Film usunięto ze zbioru");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.WriteLine("Coś poszło nie tak");
+                    Console.ReadKey();
+                }
+            }               
+            else
+            {
+                Console.WriteLine("Podano zły typ elementu!");
+                Console.ReadKey();
+                RemoveLibraryElement();
+            }
+        }
+
         public static void GetAllUsersList()
         {
             Console.Clear();
@@ -327,6 +380,24 @@ namespace ClassLibrary
             Console.WriteLine(TextFileHandler.GetMoviesListFromFile());
 
             Console.WriteLine("Powrót");
+
+            Console.ReadKey();
+        }
+
+        public static void SearchLibraryElement()
+        {
+            string title;
+
+            Console.Clear();
+
+            Console.WriteLine("Wyszukiwarka");
+            Console.WriteLine("___________________________");
+
+            Console.Write("Podaj tytul: ");
+            title = Console.ReadLine();
+
+            Console.WriteLine(TextFileHandler.SearchBook(title));
+            Console.WriteLine(TextFileHandler.SearchMovie(title));
 
             Console.ReadKey();
         }
