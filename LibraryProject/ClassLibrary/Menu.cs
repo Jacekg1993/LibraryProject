@@ -18,6 +18,16 @@ namespace ClassLibrary
         LogOut
     }
 
+    public enum OrdinaryUserMenuOption
+    {
+        SearchLibraryElement = 1,
+        Borrow,
+        Return,
+        GetBorrowingsList,
+        SettlePenalties,
+        LogOut      
+    }
+
     public static class Menu
     {
         public static void LogInView()
@@ -54,6 +64,7 @@ namespace ClassLibrary
                 Console.WriteLine($"Witaj {LoggedOrdinaryUser.Name}!");
                 Console.Write("kliknij aby kontynuować");
                 Console.ReadKey();
+                OrdinaryUserMenuView();
             }             
         }
 
@@ -156,7 +167,59 @@ namespace ClassLibrary
                     break;
                 case LibrarianMenuOption.ApproveReturn:
                     break;
-                case LibrarianMenuOption.LogOut:
+                default:
+                    break;
+            }
+        }
+
+        public static void OrdinaryUserMenuView()
+        {
+            int ordinaryUserMenuSelectedOptionInt = 0;
+            OrdinaryUserMenuOption ordinaryUserMenuSelectedOption;
+
+            while (true)
+            {
+                Console.Clear();
+
+                Console.WriteLine("1. Wyszukawiarka elementów w zbiorze");
+                Console.WriteLine("2. Wypożycz");
+                Console.WriteLine("3. Zwróć");
+                Console.WriteLine("4. Lista aktualnych wypożyczeń");
+                Console.WriteLine("5. Rozliczenie kar");
+                Console.WriteLine("6. Wyloguj");
+
+                Console.Write("Wybierz opcje: ");
+                ordinaryUserMenuSelectedOptionInt = int.Parse(Console.ReadLine());
+
+                if (ordinaryUserMenuSelectedOptionInt > 0 && ordinaryUserMenuSelectedOptionInt < 6)
+                {
+                    ordinaryUserMenuSelectedOption = (OrdinaryUserMenuOption)ordinaryUserMenuSelectedOptionInt;
+                    OrdinaryUserMenuOptionSelection(ordinaryUserMenuSelectedOption);
+                }
+                else if (ordinaryUserMenuSelectedOptionInt == 6)
+                {
+                    LogInView();
+                }
+            }
+        }
+
+        public static void OrdinaryUserMenuOptionSelection(OrdinaryUserMenuOption option)
+        {
+            switch (option)
+            {
+                case OrdinaryUserMenuOption.SearchLibraryElement:
+                    SearchLibraryElement();
+                    break;
+                case OrdinaryUserMenuOption.Borrow:
+                    
+                    break;
+                case OrdinaryUserMenuOption.Return:
+                    
+                    break;
+                case OrdinaryUserMenuOption.GetBorrowingsList:
+                    
+                    break;
+                case OrdinaryUserMenuOption.SettlePenalties:
                     
                     break;
                 default:
@@ -398,6 +461,8 @@ namespace ClassLibrary
 
             Console.WriteLine(TextFileHandler.SearchBook(title));
             Console.WriteLine(TextFileHandler.SearchMovie(title));
+
+            Console.Write("Powrót");
 
             Console.ReadKey();
         }
