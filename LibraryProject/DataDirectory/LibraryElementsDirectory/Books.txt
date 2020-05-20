@@ -1,4 +1,9 @@
-1, metro 2033,fantasy,709
-2, metro 2034,fantasy,109
-4, Władca pierścieni,fantasy,1029
-5, Władca pierścieni 3,fantasy,501
+1, Ojciec krzestny 6,kryminalna,500
+2, Gra o tron,fantasy,500
+3, Starcie królów,fantasy,605
+4, Nawałnica mieczy,fantasy,679
+5, Uczta dla wron,fantasy,1029
+6, Taniec ze smokami,fantasy,849
+7, Władca pierścieni,fantasy,743
+8, Hobbit,fantasy,567
+9, Ojciec chrzestny,kryminał,543

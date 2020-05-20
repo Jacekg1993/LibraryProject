@@ -466,5 +466,11 @@ namespace ClassLibrary
 
             Console.ReadKey();
         }
+
+        public static void BorrowALibraryElement()
+        {
+
+        }
     }
+
 }

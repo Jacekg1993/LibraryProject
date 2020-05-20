@@ -1,4 +1,2 @@
 Librarian1,a,1,1
-OrdinaryUser2,b,2,2
-OrdinaryUser3,f,2,3
-OrdinaryUser4,s,2,4
+OrdinaryUser1,dupa,2,1

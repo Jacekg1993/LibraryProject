@@ -16,17 +16,22 @@ namespace LibraryApplication
 
 
             //List<Book> listbook = new List<Book>();
-            //listbook.Add(TextFileHandler.CreateNewBook("metro 2033", "fantasy", 709));
-            //listbook.Add(TextFileHandler.CreateNewBook("metro 2034", "fantasy", 109));
-            //listbook.Add(TextFileHandler.CreateNewBook("metro 2035", "fantasy", 79));
-            //listbook.Add(TextFileHandler.CreateNewBook("Władca pierścieni", "fantasy", 1029));
+            //listbook.Add(TextFileHandler.CreateNewBook("Gra o tron", "fantasy", 500));
+            //listbook.Add(TextFileHandler.CreateNewBook("Starcie królów", "fantasy", 605));
+            //listbook.Add(TextFileHandler.CreateNewBook("Nawałnica mieczy", "fantasy", 679));
+            //listbook.Add(TextFileHandler.CreateNewBook("Uczta dla wron", "fantasy", 1029));
+            //listbook.Add(TextFileHandler.CreateNewBook("Taniec ze smokami", "fantasy", 849));
+            //listbook.Add(TextFileHandler.CreateNewBook("Władca pierścieni", "fantasy", 743));
+            //listbook.Add(TextFileHandler.CreateNewBook("Hobbit", "fantasy", 567));
+            //listbook.Add(TextFileHandler.CreateNewBook("Ojciec chrzestny", "kryminał", 543));
 
             //List<Movie> listmovie = new List<Movie>();
-            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny", "kryminalny", 60));
-            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny2", "kryminalny", 602));
-            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny3", "kryminalny", 603));
-            //listmovie.Add(TextFileHandler.CreateNewMovie("Władca pierścieni 1", "fantasy", 75));
-            //listmovie.Add(TextFileHandler.CreateNewMovie("Władca pierścieni 1", "fantasy", 890));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny", "kryminał", 156));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny 2", "kryminał", 189));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Ojciec chrzestny 3", "kryminał", 165));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Władca pierścieni: drużyna pierścienia", "fantasy", 196));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Władca pierścieni: dwie wieże", "fantasy", 204));
+            //listmovie.Add(TextFileHandler.CreateNewMovie("Władca pierścieni: powrót króla", "fantasy", 176));
 
             //List<OrdinaryUser> listusers = new List<OrdinaryUser>();
             //listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Zenek", "Gos", "b"));
@@ -40,9 +45,6 @@ namespace LibraryApplication
             //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Tata", "Gos", "a"));
 
             Menu.LogInView();
-
-            //Console.WriteLine(TextFileHandler.SearchBook("adca"));
-            //Console.WriteLine(TextFileHandler.SearchMovie("adca"));
 
             Console.ReadKey();
         }
