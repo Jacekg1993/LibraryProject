@@ -46,6 +46,8 @@ namespace LibraryApplication
 
             Menu.LogInView();
 
+            //Console.WriteLine(TextFileHandler.CheckIfMovieStatusIsAvailable(2));
+
             //Console.WriteLine(TextFileHandler.CheckIfMovieExistsById(6)); 
 
 

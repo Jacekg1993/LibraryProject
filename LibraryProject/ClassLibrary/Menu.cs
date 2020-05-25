@@ -485,7 +485,7 @@ namespace ClassLibrary
                 Console.Write("Podaj ID elementu: ");
                 id = ushort.Parse(Console.ReadLine());
 
-                if (TextFileHandler.CheckIfBookExistsById(id))
+                if (TextFileHandler.CheckIfBookExistsById(id) && TextFileHandler.CheckIfBookStatusIsAvailable(id))
                 {
                     //int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
 
@@ -498,9 +498,9 @@ namespace ClassLibrary
                 } 
                 else
                 {
-                    Console.WriteLine("Nie ma takiego elementu w zbiorze!");
+                    Console.WriteLine("Podano błędne ID elementu!");
                     Console.ReadKey();
-                    BorrowALibraryElement(LoggedOrdinaryUser);
+                    //BorrowALibraryElement(LoggedOrdinaryUser);
                 }
             }
             else if (type == 2)
@@ -508,7 +508,7 @@ namespace ClassLibrary
                 Console.Write("Podaj ID elementu: ");
                 id = ushort.Parse(Console.ReadLine());
 
-                if (TextFileHandler.CheckIfMovieExistsById(id))
+                if (TextFileHandler.CheckIfMovieExistsById(id) && TextFileHandler.CheckIfMovieStatusIsAvailable(id))
                 {
                     //int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
 
@@ -521,9 +521,9 @@ namespace ClassLibrary
                 }
                 else
                 {
-                    Console.WriteLine("Nie ma takiego elementu w zbiorze!");
+                    Console.WriteLine("Podano błędne ID elementu!");
                     Console.ReadKey();
-                    BorrowALibraryElement(LoggedOrdinaryUser);
+                    //BorrowALibraryElement(LoggedOrdinaryUser);
                 }
             }
             else

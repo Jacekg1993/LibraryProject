@@ -530,6 +530,27 @@ namespace ClassLibrary
             File.WriteAllLines(booksFilePath, bookList);
         }
 
+        public static bool CheckIfBookStatusIsAvailable(int bookID)
+        {
+            List<string> bookList = File.ReadAllLines(booksFilePath).ToList();
+
+            string[] bookDataTmp;
+            for (int i = 0; i < bookList.Count; i++)
+            {
+                bookDataTmp = bookList[i].Split(',');
+
+                if (int.Parse(bookDataTmp[0]) == bookID)
+                {
+                    if (bookDataTmp[4] == "0")
+                    {
+                        return true;
+                    }                       
+                }
+            }
+
+            return false;
+        }
+
         public static void ChangeMovieStatusToPending(int movieID)
         {
             List<string> movieList = File.ReadAllLines(moviesFilePath).ToList();
@@ -548,6 +569,45 @@ namespace ClassLibrary
 
             File.WriteAllLines(moviesFilePath, movieList);
         }
+
+        public static bool CheckIfMovieStatusIsAvailable(int movieID)
+        {
+            List<string> movieList = File.ReadAllLines(moviesFilePath).ToList();
+
+            string[] movieDataTmp;
+            for (int i = 0; i < movieList.Count; i++)
+            {
+                movieDataTmp = movieList[i].Split(',');
+
+                if (int.Parse(movieDataTmp[0]) == movieID)
+                {
+                    if (movieDataTmp[4] == "0")
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        //public static string GetRequestsListFromFile()
+        //{
+        //    List<string> mrequestListFromFile = File.ReadAllLines(moviesFilePath).ToList();
+        //    string[] requestSeparatedData;
+
+        //    StringBuilder requestList = new System.Text.StringBuilder();
+        //    requestList.AppendLine("ID\t|ID Elementu\t|Rodzaj elementu\t|Data\t|ID Użytkownika");
+
+        //    foreach (string line in mrequestListFromFile)
+        //    {
+        //        requestSeparatedData = line.Split(',');
+        //        movieStatus = ShowLibraryElementStatusAsStatement(requestSeparatedData[4]);
+        //        requestList.AppendLine($"{requestSeparatedData[0]}\t|{requestSeparatedData[1]}\t|{requestSeparatedData[2]}\t|{requestSeparatedData[3]}\t|{movieStatus}");
+        //    }
+
+        //    return requestList.ToString();
+        //}
 
         //BORROW METHODS
         public static int GetCurrentBorrowingID(OrdinaryUser ordinaryUser)
