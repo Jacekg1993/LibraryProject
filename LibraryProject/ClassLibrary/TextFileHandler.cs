@@ -27,7 +27,7 @@ namespace ClassLibrary
         //BOOK METHODS
         public static Book CreateNewBook(string title, string section, int pages)
         {
-            File.AppendAllText(booksFilePath, $"{GetAvailableBookID() + 1}, {title},{section},{pages}\n"); //Add new line to .txt file           
+            File.AppendAllText(booksFilePath, $"{GetAvailableBookID() + 1}, {title},{section},{pages},0\n"); //Add new line to .txt file           
             return new Book(title, section, GetAvailableBookID() + 1, pages);
         }
 
@@ -79,6 +79,7 @@ namespace ClassLibrary
 
         public static string SearchBookByTitle(string title)
         {
+            string bookStatus = null;
             List<string> bookListFromFile = File.ReadAllLines(booksFilePath).ToList();
 
             string[] bookSeparatedData;
@@ -86,14 +87,15 @@ namespace ClassLibrary
             StringBuilder booksList = new System.Text.StringBuilder();
 
             booksList.AppendLine("Znalezione książki: ");
-            booksList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Liczba stron");
+            booksList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Liczba stron\t|Status");
 
             foreach (string book in bookListFromFile)
             {
                 if (book.Contains(title))
                 {
                     bookSeparatedData = book.Split(',');
-                    booksList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}|{bookSeparatedData[3]}");
+                    bookStatus = ShowLibraryElementStatusAsStatement(bookSeparatedData[4]);
+                    booksList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}|{bookSeparatedData[3]}|{bookStatus}");
                 }
             }
 
@@ -116,25 +118,28 @@ namespace ClassLibrary
 
         public static string GetBooksListFromFile()
         {
+            string bookStatus = null;
             List<string> booksListFromFile = File.ReadAllLines(booksFilePath).ToList();
             string[] bookSeparatedData;
 
             StringBuilder bookList = new System.Text.StringBuilder();
-            bookList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Ilość stron");
+            bookList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Ilość stron|\tStatus");
 
             foreach (string line in booksListFromFile)
             {
                 bookSeparatedData = line.Split(',');
-                bookList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}\t|{bookSeparatedData[3]}");
+                bookStatus = ShowLibraryElementStatusAsStatement(bookSeparatedData[4]);                
+                bookList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}\t|{bookSeparatedData[3]}\t|{bookStatus}");
             }
 
             return bookList.ToString();
         }
 
+        
         //MOVIE METHODS
         public static Movie CreateNewMovie(string title, string section, int duration)
         {
-            File.AppendAllText(moviesFilePath, $"{GetAvailableMovieID() + 1},{title},{section},{duration}\n"); //Add new line to .txt file           
+            File.AppendAllText(moviesFilePath, $"{GetAvailableMovieID() + 1},{title},{section},{duration},0\n"); //Add new line to .txt file           
             return new Movie(title, section, GetAvailableMovieID() + 1, duration);
         }
 
@@ -186,6 +191,7 @@ namespace ClassLibrary
 
         public static string SearchMovieByTitle(string title)
         {
+            string movieStatus = null;
             List<string> movieListFromFile = File.ReadAllLines(moviesFilePath).ToList();
         
             string[] movieSeparatedData;
@@ -193,14 +199,15 @@ namespace ClassLibrary
             StringBuilder moviesList = new System.Text.StringBuilder();
 
             moviesList.AppendLine("Znalezione filmy: ");
-            moviesList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Czas trwania");
+            moviesList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Czas trwania\t|Status");
 
             foreach (string movie in movieListFromFile)
             {
                 if (movie.Contains(title))
                 {
                     movieSeparatedData = movie.Split(',');
-                    moviesList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}|{movieSeparatedData[3]}"); 
+                    movieStatus = ShowLibraryElementStatusAsStatement(movieSeparatedData[4]);
+                    moviesList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}|{movieSeparatedData[3]}|{movieStatus}"); 
                 }
             }
 
@@ -223,6 +230,7 @@ namespace ClassLibrary
 
         public static string GetMoviesListFromFile()
         {
+            string movieStatus = null;
             List<string> moviesListFromFile = File.ReadAllLines(moviesFilePath).ToList();
             string[] movieSeparatedData;
 
@@ -232,10 +240,29 @@ namespace ClassLibrary
             foreach (string line in moviesListFromFile)
             {
                 movieSeparatedData = line.Split(',');
-                movieList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}\t|{movieSeparatedData[3]}");
+                movieStatus = ShowLibraryElementStatusAsStatement(movieSeparatedData[4]);               
+                movieList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}\t|{movieSeparatedData[3]}\t|{movieStatus}");
             }
 
             return movieList.ToString();
+        }
+
+        //LIBRARY ELEMENT METHODS
+        public static string ShowLibraryElementStatusAsStatement(string bookStatus)
+        {
+            if (bookStatus == "0")
+            {
+                return "Dostępna";
+            }
+            else if (bookStatus == "1")
+            {
+                return "Oczekująca";
+            }
+            else if (bookStatus == "2")
+            {
+                return "Wypożyczona";
+            }
+            return "Błąd";
         }
 
         //ORDINARY USER METHODS
@@ -391,6 +418,7 @@ namespace ClassLibrary
             string newLibrariansDirectory = librariansDirectoryPath + @"\Librarian" + newLibrarian.UserID;
 
             Directory.CreateDirectory(newLibrariansDirectory);
+            File.Create(newLibrariansDirectory + @"\Requests_Librarian" + newLibrarian.UserID + ".txt");
         }
       
         public static int getCurrentLibrarianID()
@@ -452,9 +480,76 @@ namespace ClassLibrary
             }
 
             return -1;
-        }                
+        }
 
-        //BORROWINGS METHODS
+        //REQUEST METHODS
+        public static void BorrowRequest(DateTime date, ushort elementID, byte elementType, int ordinaryUserID)
+        {
+            List<string> librarianListFromFile = File.ReadAllLines(librariansListPath).ToList();
+
+            for (int i = 0; i < librarianListFromFile.Count; i++)
+            {
+                string[] parts = librarianListFromFile[i].Split(',');
+                string requestListPath = librariansDirectoryPath + @"\Librarian" + parts[0] + @"\Requests_Librarian" + parts[0] + ".txt";
+
+                int availableRequestID = GetCurrentRequestID(int.Parse(parts[0]));
+                File.AppendAllText(requestListPath, $"{availableRequestID + 1},{elementID},{elementType},{ordinaryUserID},{DateTime.Now}\n");
+            }
+        }
+
+        public static int GetCurrentRequestID(int requestID)
+        {
+            string requestListPath = librariansDirectoryPath + @"\Librarian" + requestID + @"\Requests_Librarian" + requestID + ".txt";
+
+            string lastLine = File.ReadLines(requestListPath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromRequest = lastLine.Split(',');
+                return int.Parse(argumentsFromRequest[0]);
+            }
+
+            return 0;
+        }
+
+        public static void ChangeBookStatusToPending(int bookID)
+        {
+            List<string> bookList = File.ReadAllLines(booksFilePath).ToList();
+
+            string[] bookDataTmp;
+            for (int i = 0; i < bookList.Count; i++)
+            {
+                bookDataTmp = bookList[i].Split(',');
+
+                if (int.Parse(bookDataTmp[0]) == bookID)
+                {
+                    bookDataTmp[4] = "1";
+                    bookList[i] = string.Join(",", bookDataTmp[0], bookDataTmp[1], bookDataTmp[2], bookDataTmp[3], bookDataTmp[4]);
+                }
+            }
+
+            File.WriteAllLines(booksFilePath, bookList);
+        }
+
+        public static void ChangeMovieStatusToPending(int movieID)
+        {
+            List<string> movieList = File.ReadAllLines(moviesFilePath).ToList();
+
+            string[] movieDataTmp;
+            for (int i = 0; i < movieList.Count; i++)
+            {
+                movieDataTmp = movieList[i].Split(',');
+
+                if (int.Parse(movieDataTmp[0]) == movieID)
+                {
+                    movieDataTmp[4] = "1";
+                    movieList[i] = string.Join(",", movieDataTmp[0], movieDataTmp[1], movieDataTmp[2], movieDataTmp[3], movieDataTmp[4]);
+                }
+            }
+
+            File.WriteAllLines(moviesFilePath, movieList);
+        }
+
+        //BORROW METHODS
         public static int GetCurrentBorrowingID(OrdinaryUser ordinaryUser)
         {
             string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUser.Login + @"\Borrowings_" + ordinaryUser.Login + ".txt";
@@ -473,9 +568,13 @@ namespace ClassLibrary
         {
             string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUser.Login + @"\Borrowings_" + ordinaryUser.Login + ".txt";
 
-            File.AppendAllText(borrowingListPath, $"{borrowID},{elementID},{elementType},{date},{borrowingStatus}");
-        }
+            File.AppendAllText(borrowingListPath, $"\n{borrowID},{elementID},{elementType},{date},{borrowingStatus}");
 
+            ChangeBookStatusToPending(elementID);
+        }
+    
+
+        //CLEAR ALL DATA BASE
         public static void ClearData()
         {
             File.Create(booksFilePath);

@@ -1,8 +1,8 @@
-1, Gra o tron,fantasy,500
-2, Starcie królów,fantasy,605
-3, Nawałnica mieczy,fantasy,679
-4, Uczta dla wron,fantasy,1029
-5, Taniec ze smokami,fantasy,849
-6, Władca pierścieni,fantasy,743
-7, Hobbit,fantasy,567
-8, Ojciec chrzestny,kryminał,543
+1, Gra o tron,fantasy,500,0
+2, Starcie królów,fantasy,605,0
+3, Nawałnica mieczy,fantasy,679,0
+4, Uczta dla wron,fantasy,1029,0
+5, Taniec ze smokami,fantasy,849,0
+6, Władca pierścieni,fantasy,743,1
+7, Hobbit,fantasy,567,0
+8, Ojciec chrzestny,kryminał,543,0

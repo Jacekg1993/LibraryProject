@@ -15,37 +15,7 @@ namespace ClassLibrary
         {
 
         }
-
-        public void CreateNewAccount()
-        {
-
-        }
-
-        public void RemoveAccount()
-        {
-
-        }
-
-        public string GetUsersList()
-        {
-            return null;
-        }
-
-        public string GetAllLibraryElementsList()
-        {
-            return null;
-        }
-
-        public void AddLibraryElement()
-        {
-
-        }
-
-        public void RemoveLibraryElement()
-        {
-
-        }
-
+   
         public void ConfirmUsersBorrowing()
         {
 
@@ -54,6 +24,20 @@ namespace ClassLibrary
         public void ConfirmUsersReturning()
         {
 
+        }
+
+        private class Request
+        {
+            public int RequestID { get; private set; }
+            public int ElementID { get; private set; }
+            public byte ElementType { get; private set; } // 1 - book, 2 - movie
+
+            public Request(DateTime date, int elementID, byte elementType, int borrowID)
+            {
+                this.ElementID = elementID;
+                this.ElementType = elementType;
+                this.RequestID = borrowID;
+            }
         }
 
     }

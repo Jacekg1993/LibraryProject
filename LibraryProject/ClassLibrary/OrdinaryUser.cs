@@ -20,21 +20,24 @@ namespace ClassLibrary
             this.Penalty = 0;
         }
 
+        public void RequestBorrowLibraryElement()
+        {
+
+        }
+
         public void BorrowLibraryElement(DateTime date, ushort elementID, byte elementType, int borrowID)
         {
-            Borrowing newBorrowing = new Borrowing(date.Date, elementID, elementType, borrowID);
+            Borrowing newBorrowing = new Borrowing(date, elementID, elementType, borrowID);
             UserBorrowings.Add(newBorrowing);
 
             byte borrowingStatusTmp = newBorrowing.BorrowStatus;
 
             TextFileHandler.AddNewBorrowingToUserFile(this, date, elementID, elementType, borrowID, borrowingStatusTmp);
-
-            Console.ReadKey();
         }
 
         public void ReturnLibraryElement(DateTime date, int borrowID)
         {
-            UserBorrowings[borrowID].BorrowStatus = 0;
+            UserBorrowings[borrowID].BorrowStatus = 0; //Pamiętać o tym, żeby dane usunąć również z pliku
         }
 
         public string GetUsersLibraryElementsList()
@@ -54,14 +57,14 @@ namespace ClassLibrary
             public byte ElementType { get; private set; } // 1 - book, 2 - movie
             public DateTime BorrowDate { get; private set; }
             public DateTime ReturnDate { get; private set; }
-            public byte BorrowStatus { get; set; } //0 - available, 1 - pending, 2 - borrowed
+            public byte BorrowStatus { get; set; } //0 - pending to return, 1 - borrowed
       
             public Borrowing(DateTime date, int elementID, byte elementType, int borrowID)
             {
                 this.BorrowDate = date;
                 this.ElementID = elementID;
                 this.ElementType = elementType;
-                this.BorrowStatus = 1;
+                this.BorrowStatus = 0;
                 this.BorrowID = borrowID;
             }
         }

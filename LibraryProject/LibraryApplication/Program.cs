@@ -42,15 +42,12 @@ namespace LibraryApplication
 
             //List<Librarian> listlibrarians = new List<Librarian>();
             //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Jacek", "Gos", "a"));
+            //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Mama", "Gos", "a"));
 
-            //Menu.LogInView();
+            Menu.LogInView();
 
             //Console.WriteLine(TextFileHandler.CheckIfMovieExistsById(6)); 
 
-            DateTime date = DateTime.Now;
-            DateTime date2 = date.Date;
-
-            Console.WriteLine(date2);
 
             Console.ReadKey();
         }

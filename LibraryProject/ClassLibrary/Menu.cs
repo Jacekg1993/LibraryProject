@@ -482,15 +482,19 @@ namespace ClassLibrary
 
             if (type == 1)
             {
-                Console.Write("\nPodaj ID elementu: ");
+                Console.Write("Podaj ID elementu: ");
                 id = ushort.Parse(Console.ReadLine());
 
                 if (TextFileHandler.CheckIfBookExistsById(id))
                 {
-                    int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
+                    //int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
 
-                    LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
-                    Console.ReadKey();
+                    //LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
+
+                    TextFileHandler.BorrowRequest(DateTime.Now, id, type, LoggedOrdinaryUser.UserID);
+                    TextFileHandler.ChangeBookStatusToPending(id);
+
+                    Console.WriteLine("Element oczekuje na zatwierdzenie");
                 } 
                 else
                 {
@@ -498,20 +502,22 @@ namespace ClassLibrary
                     Console.ReadKey();
                     BorrowALibraryElement(LoggedOrdinaryUser);
                 }
-
-                Console.ReadKey();
             }
             else if (type == 2)
             {
-                Console.Write("\nPodaj ID elementu: ");
+                Console.Write("Podaj ID elementu: ");
                 id = ushort.Parse(Console.ReadLine());
 
                 if (TextFileHandler.CheckIfMovieExistsById(id))
                 {
-                    int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
-                    LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
-                    Console.WriteLine("SKonczono"); //usun
-                    Console.ReadKey();
+                    //int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
+
+                    //LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
+
+                    TextFileHandler.BorrowRequest(DateTime.Now, id, type, LoggedOrdinaryUser.UserID);
+                    TextFileHandler.ChangeMovieStatusToPending(id);
+
+                    Console.WriteLine("Element oczekuje na zatwierdzenie");
                 }
                 else
                 {
@@ -519,8 +525,6 @@ namespace ClassLibrary
                     Console.ReadKey();
                     BorrowALibraryElement(LoggedOrdinaryUser);
                 }
-
-                Console.ReadKey();
             }
             else
             {
@@ -528,7 +532,8 @@ namespace ClassLibrary
                 Console.ReadKey();
                 BorrowALibraryElement(LoggedOrdinaryUser);
             }
-            
+
+            Console.ReadKey();
         }
 
     }
