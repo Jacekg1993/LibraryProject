@@ -24,6 +24,7 @@ namespace ClassLibrary
         static List<string> booksFileLines = File.ReadAllLines(booksFilePath).ToList();
         static List<string> moviesFileLines = File.ReadAllLines(moviesFilePath).ToList();
 
+        //BOOK METHODS
         public static Book CreateNewBook(string title, string section, int pages)
         {
             File.AppendAllText(booksFilePath, $"{GetAvailableBookID() + 1}, {title},{section},{pages}\n"); //Add new line to .txt file           
@@ -76,6 +77,61 @@ namespace ClassLibrary
             return -1;
         }
 
+        public static string SearchBookByTitle(string title)
+        {
+            List<string> bookListFromFile = File.ReadAllLines(booksFilePath).ToList();
+
+            string[] bookSeparatedData;
+
+            StringBuilder booksList = new System.Text.StringBuilder();
+
+            booksList.AppendLine("Znalezione książki: ");
+            booksList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Liczba stron");
+
+            foreach (string book in bookListFromFile)
+            {
+                if (book.Contains(title))
+                {
+                    bookSeparatedData = book.Split(',');
+                    booksList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}|{bookSeparatedData[3]}");
+                }
+            }
+
+            return booksList.ToString();
+        }
+
+        public static bool CheckIfBookExistsById(int id)
+        {
+            string[] allBooks = File.ReadAllLines(booksFilePath);
+            foreach (string line in allBooks)
+            {
+                string[] parts = line.Split(',');
+                if (int.Parse(parts[0]) == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static string GetBooksListFromFile()
+        {
+            List<string> booksListFromFile = File.ReadAllLines(booksFilePath).ToList();
+            string[] bookSeparatedData;
+
+            StringBuilder bookList = new System.Text.StringBuilder();
+            bookList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Ilość stron");
+
+            foreach (string line in booksListFromFile)
+            {
+                bookSeparatedData = line.Split(',');
+                bookList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}\t|{bookSeparatedData[3]}");
+            }
+
+            return bookList.ToString();
+        }
+
+        //MOVIE METHODS
         public static Movie CreateNewMovie(string title, string section, int duration)
         {
             File.AppendAllText(moviesFilePath, $"{GetAvailableMovieID() + 1},{title},{section},{duration}\n"); //Add new line to .txt file           
@@ -128,30 +184,7 @@ namespace ClassLibrary
             return -1;
         }
 
-        public static string SearchBook(string title)
-        {
-            List<string> bookListFromFile = File.ReadAllLines(booksFilePath).ToList();
-
-            string[] bookSeparatedData;
-
-            StringBuilder booksList = new System.Text.StringBuilder();
-
-            booksList.AppendLine("Znalezione książki: ");
-            booksList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Liczba stron");
-
-            foreach (string book in bookListFromFile)
-            {
-                if (book.Contains(title))
-                {
-                    bookSeparatedData = book.Split(',');
-                    booksList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}|{bookSeparatedData[3]}");
-                }
-            }
-
-            return booksList.ToString();
-        }
-
-        public static string SearchMovie(string title)
+        public static string SearchMovieByTitle(string title)
         {
             List<string> movieListFromFile = File.ReadAllLines(moviesFilePath).ToList();
         
@@ -173,13 +206,45 @@ namespace ClassLibrary
 
             return moviesList.ToString();
         }
+      
+        public static bool CheckIfMovieExistsById(int id)
+        {
+            string[] allMovies = File.ReadAllLines(moviesFilePath);
+            foreach (string line in allMovies)
+            {
+                string[] parts = line.Split(',');
+                if (int.Parse(parts[0]) == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
+        public static string GetMoviesListFromFile()
+        {
+            List<string> moviesListFromFile = File.ReadAllLines(moviesFilePath).ToList();
+            string[] movieSeparatedData;
+
+            StringBuilder movieList = new System.Text.StringBuilder();
+            movieList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Czas trwania");
+
+            foreach (string line in moviesListFromFile)
+            {
+                movieSeparatedData = line.Split(',');
+                movieList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}\t|{movieSeparatedData[3]}");
+            }
+
+            return movieList.ToString();
+        }
+
+        //ORDINARY USER METHODS
         public static OrdinaryUser CreateNewOrdinaryUser(string name, string surname, string password)
         {
-            OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, 2, getCurrentOrdinaryUserID() + 1, password);
+            OrdinaryUser newOrdinaryUser = new OrdinaryUser(name, surname, 2, getCurrentOrdinaryUserID() + 1, password, $"OrdinaryUser{getCurrentOrdinaryUserID() + 1}");
 
             File.AppendAllText(ordinaryUsersListPath, $"{newOrdinaryUser.UserID},{name},{surname},{2},0\n"); //Add new line to .txt file
-            File.AppendAllText(accountsInfoPath, $"OrdinaryUser{newOrdinaryUser.UserID},{password},{newOrdinaryUser.UserType},{newOrdinaryUser.UserID}\n");
+            File.AppendAllText(accountsInfoPath, $"{newOrdinaryUser.Login},{password},{newOrdinaryUser.UserType},{newOrdinaryUser.UserID}\n");
 
             CreateNewOrdinaryUserDataFiles(newOrdinaryUser);
          
@@ -291,12 +356,30 @@ namespace ClassLibrary
             return false;
         }
 
+        public static string GetOrdinaryUserListFromFile()
+        {
+            List<string> ordinaryUserListFromFile = File.ReadAllLines(ordinaryUsersListPath).ToList();
+            string[] ordinaryUserSeparatedData;
+
+            StringBuilder ordinaryUserList = new System.Text.StringBuilder();
+            ordinaryUserList.AppendLine("ID\t|Imię\t|Nazwisko\t|Naliczone kary [zł]");
+
+            foreach (string line in ordinaryUserListFromFile)
+            {
+                ordinaryUserSeparatedData = line.Split(',');
+                ordinaryUserList.AppendLine($"{ordinaryUserSeparatedData[0]}\t|{ordinaryUserSeparatedData[1]}\t|{ordinaryUserSeparatedData[2]}\t|{ordinaryUserSeparatedData[4]}");
+            }
+
+            return ordinaryUserList.ToString();
+        }
+
+        //LIBRARIAN METHODS
         public static Librarian CreateNewLibrarian(string name, string surname, string password)
         {
-            Librarian newLibrarian = new Librarian(name, surname, 1, getCurrentLibrarianID() + 1, password);
+            Librarian newLibrarian = new Librarian(name, surname, 1, getCurrentLibrarianID() + 1, password, $"Librarian{getCurrentLibrarianID() + 1}");
 
             File.AppendAllText(librariansListPath, $"{newLibrarian.UserID},{name},{surname},{1}\n"); //Add new line to .txt file
-            File.AppendAllText(accountsInfoPath, $"Librarian{newLibrarian.UserID},{password},{newLibrarian.UserType},{newLibrarian.UserID}\n");
+            File.AppendAllText(accountsInfoPath, $"{newLibrarian.Login},{password},{newLibrarian.UserType},{newLibrarian.UserID}\n");
 
             CreateNewLibrarianDataFiles(newLibrarian);
 
@@ -339,22 +422,6 @@ namespace ClassLibrary
             return null;
         }
 
-        public static int GetUserIdIfExist(string login, string password)
-        {
-            string[] lines = File.ReadAllLines(accountsInfoPath);
-            foreach (string line in lines)
-            {
-                string[] parts = line.Split(',');
-                if (parts[0] == login && parts[1] == password)
-                {
-                    return int.Parse(parts[3]);
-                }
-            }
-            return -1;
-        }
-
-        
-
         public static string GetLibrarianListFromFile()
         {
             List<string> librarianListFromFile = File.ReadAllLines(librariansListPath).ToList();
@@ -372,55 +439,41 @@ namespace ClassLibrary
             return librarianList.ToString();
         }
 
-        public static string GetOrdinaryUserListFromFile()
+        public static int GetUserIdIfExist(string login, string password)
         {
-            List<string> ordinaryUserListFromFile = File.ReadAllLines(ordinaryUsersListPath).ToList();
-            string[] ordinaryUserSeparatedData;
-
-            StringBuilder ordinaryUserList = new System.Text.StringBuilder();
-            ordinaryUserList.AppendLine("ID\t|Imię\t|Nazwisko\t|Naliczone kary [zł]");
-
-            foreach (string line in ordinaryUserListFromFile)
+            string[] lines = File.ReadAllLines(accountsInfoPath);
+            foreach (string line in lines)
             {
-                ordinaryUserSeparatedData = line.Split(',');
-                ordinaryUserList.AppendLine($"{ordinaryUserSeparatedData[0]}\t|{ordinaryUserSeparatedData[1]}\t|{ordinaryUserSeparatedData[2]}\t|{ordinaryUserSeparatedData[4]}");
+                string[] parts = line.Split(',');
+                if (parts[0] == login && parts[1] == password)
+                {
+                    return int.Parse(parts[3]);
+                }
             }
 
-            return ordinaryUserList.ToString();
+            return -1;
+        }                
+
+        //BORROWINGS METHODS
+        public static int GetCurrentBorrowingID(OrdinaryUser ordinaryUser)
+        {
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUser.Login + @"\Borrowings_" + ordinaryUser.Login + ".txt";
+
+            string lastLine = File.ReadLines(borrowingListPath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromFile = lastLine.Split(',');
+                return int.Parse(argumentsFromFile[0]);
+            }
+
+            return 0;
         }
 
-        public static string GetBooksListFromFile()
+        public static void AddNewBorrowingToUserFile(OrdinaryUser ordinaryUser, DateTime date, ushort elementID, byte elementType, int borrowID, byte borrowingStatus)
         {
-            List<string> booksListFromFile = File.ReadAllLines(booksFilePath).ToList();
-            string[] bookSeparatedData;
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUser.Login + @"\Borrowings_" + ordinaryUser.Login + ".txt";
 
-            StringBuilder bookList = new System.Text.StringBuilder();
-            bookList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Ilość stron");
-
-            foreach (string line in booksListFromFile)
-            {
-                bookSeparatedData = line.Split(',');
-                bookList.AppendLine($"{bookSeparatedData[0]}\t|{bookSeparatedData[1]}\t|{bookSeparatedData[2]}\t|{bookSeparatedData[3]}");
-            }
-
-            return bookList.ToString();
-        }
-
-        public static string GetMoviesListFromFile()
-        {
-            List<string> moviesListFromFile = File.ReadAllLines(moviesFilePath).ToList();
-            string[] movieSeparatedData;
-
-            StringBuilder movieList = new System.Text.StringBuilder();
-            movieList.AppendLine("ID\t|Tytuł\t|Rodzaj\t|Czas trwania");
-
-            foreach (string line in moviesListFromFile)
-            {
-                movieSeparatedData = line.Split(',');
-                movieList.AppendLine($"{movieSeparatedData[0]}\t|{movieSeparatedData[1]}\t|{movieSeparatedData[2]}\t|{movieSeparatedData[3]}");
-            }
-
-            return movieList.ToString();
+            File.AppendAllText(borrowingListPath, $"{borrowID},{elementID},{elementType},{date},{borrowingStatus}");
         }
 
         public static void ClearData()

@@ -9,14 +9,16 @@ namespace ClassLibrary
         public int ElementID { get; private set; }
         public string ElementTitle { get; private set; }
         public string ElementSection { get; private set; }
-        public bool ElementAvailability { get; set; }
+        public byte ElementStatus { get; set; } //0 - available, 1 - pending, 2 - borrowed
+        public string BorrowerUserName { get; set; }
 
         public LibraryCollectionElement(string title, string section, int ID)
         {
             this.ElementTitle = title;
             this.ElementSection = section;
             this.ElementID = ID;
-            this.ElementAvailability = true;
+            this.ElementStatus = 0;
+            this.BorrowerUserName = "None";
         } 
     }
 }

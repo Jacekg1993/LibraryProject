@@ -45,10 +45,10 @@ namespace ClassLibrary
                 userData = GetUserDataByEnteringPasses();
             }
             userArguments = userData.Split(',');
-
+            
             if (byte.Parse(userArguments[3]) == 1)
             {
-                LoggedLibrarian = new Librarian(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[4]);
+                LoggedLibrarian = new Librarian(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[4], login: userArguments[5]);
 
                 Console.Clear();
                 Console.WriteLine($"Witaj {LoggedLibrarian.Name}!");
@@ -58,13 +58,13 @@ namespace ClassLibrary
             }
             else if(byte.Parse(userArguments[3]) == 2)
             {
-                LoggedOrdinaryUser = new OrdinaryUser(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[4]);
+                LoggedOrdinaryUser = new OrdinaryUser(name: userArguments[1], surname: userArguments[2], type: byte.Parse(userArguments[3]), id: int.Parse(userArguments[0]), password: userArguments[5], login: userArguments[6]);
 
                 Console.Clear();
                 Console.WriteLine($"Witaj {LoggedOrdinaryUser.Name}!");
                 Console.Write("kliknij aby kontynuować");
                 Console.ReadKey();
-                OrdinaryUserMenuView();
+                OrdinaryUserMenuView(LoggedOrdinaryUser);
             }             
         }
 
@@ -91,12 +91,12 @@ namespace ClassLibrary
                 if (login.Contains("Librarian"))
                 {
                     userData = TextFileHandler.GetLibrarianDataFromFile(UserId);
-                    return userData + $",{password}";
+                    return userData + $",{password},{login}";
                 }
                 else if (login.Contains("User"))
                 {
                     userData = TextFileHandler.GetOrdinaryUserDataFromFile(UserId);
-                    return userData + $",{password}";
+                    return userData + $",{password},{login}";
                 }
             }
            
@@ -172,7 +172,7 @@ namespace ClassLibrary
             }
         }
 
-        public static void OrdinaryUserMenuView()
+        public static void OrdinaryUserMenuView(OrdinaryUser LoggedOrdinaryUser)
         {
             int ordinaryUserMenuSelectedOptionInt = 0;
             OrdinaryUserMenuOption ordinaryUserMenuSelectedOption;
@@ -194,7 +194,7 @@ namespace ClassLibrary
                 if (ordinaryUserMenuSelectedOptionInt > 0 && ordinaryUserMenuSelectedOptionInt < 6)
                 {
                     ordinaryUserMenuSelectedOption = (OrdinaryUserMenuOption)ordinaryUserMenuSelectedOptionInt;
-                    OrdinaryUserMenuOptionSelection(ordinaryUserMenuSelectedOption);
+                    OrdinaryUserMenuOptionSelection(ordinaryUserMenuSelectedOption, LoggedOrdinaryUser);
                 }
                 else if (ordinaryUserMenuSelectedOptionInt == 6)
                 {
@@ -203,7 +203,7 @@ namespace ClassLibrary
             }
         }
 
-        public static void OrdinaryUserMenuOptionSelection(OrdinaryUserMenuOption option)
+        public static void OrdinaryUserMenuOptionSelection(OrdinaryUserMenuOption option, OrdinaryUser LoggedOrdinaryUser)
         {
             switch (option)
             {
@@ -211,7 +211,7 @@ namespace ClassLibrary
                     SearchLibraryElement();
                     break;
                 case OrdinaryUserMenuOption.Borrow:
-                    
+                    BorrowALibraryElement(LoggedOrdinaryUser);
                     break;
                 case OrdinaryUserMenuOption.Return:
                     
@@ -459,18 +459,78 @@ namespace ClassLibrary
             Console.Write("Podaj tytul: ");
             title = Console.ReadLine();
 
-            Console.WriteLine(TextFileHandler.SearchBook(title));
-            Console.WriteLine(TextFileHandler.SearchMovie(title));
+            Console.WriteLine(TextFileHandler.SearchBookByTitle(title));
+            Console.WriteLine(TextFileHandler.SearchMovieByTitle(title));
 
             Console.Write("Powrót");
 
             Console.ReadKey();
         }
 
-        public static void BorrowALibraryElement()
+        public static void BorrowALibraryElement(OrdinaryUser LoggedOrdinaryUser)
         {
+            ushort id;
+            byte type;
 
+            Console.Clear();
+
+            Console.WriteLine("Wypożyczalnia");
+            Console.WriteLine("___________________________");
+
+            Console.Write("Podaj typ elementu:\nKsiążka: 1\nFilm: 2\n");
+            type = byte.Parse(Console.ReadLine());
+
+            if (type == 1)
+            {
+                Console.Write("\nPodaj ID elementu: ");
+                id = ushort.Parse(Console.ReadLine());
+
+                if (TextFileHandler.CheckIfBookExistsById(id))
+                {
+                    int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
+
+                    LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
+                    Console.ReadKey();
+                } 
+                else
+                {
+                    Console.WriteLine("Nie ma takiego elementu w zbiorze!");
+                    Console.ReadKey();
+                    BorrowALibraryElement(LoggedOrdinaryUser);
+                }
+
+                Console.ReadKey();
+            }
+            else if (type == 2)
+            {
+                Console.Write("\nPodaj ID elementu: ");
+                id = ushort.Parse(Console.ReadLine());
+
+                if (TextFileHandler.CheckIfMovieExistsById(id))
+                {
+                    int availableBorrowingIdTmp = TextFileHandler.GetCurrentBorrowingID(LoggedOrdinaryUser) + 1;
+                    LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
+                    Console.WriteLine("SKonczono"); //usun
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.WriteLine("Nie ma takiego elementu w zbiorze!");
+                    Console.ReadKey();
+                    BorrowALibraryElement(LoggedOrdinaryUser);
+                }
+
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Podano zły typ elementu!");
+                Console.ReadKey();
+                BorrowALibraryElement(LoggedOrdinaryUser);
+            }
+            
         }
+
     }
 
 }

@@ -7,7 +7,6 @@ namespace ClassLibrary
     public class OrdinaryUser : User
     {
         public float Penalty { get; set; }
-        private List<int> UserElementsList = new List<int>(); // czy na pewno potrzebne? elementy wypozyczone mam w liscie UserBorrowings
         private List<Borrowing> UserBorrowings = new List<Borrowing>();
 
         public OrdinaryUser() : base()
@@ -16,19 +15,26 @@ namespace ClassLibrary
             this.UserBorrowings.Clear(); // Pozniej do zmiany, poniewaz Borrowings beda sie znajdowac rowniez w pliku.txt i tam tez trzeba to usunac
         }
 
-        public OrdinaryUser(string name, string surname, byte type, int id, string password) : base(name, surname, type, id, password)
+        public OrdinaryUser(string name, string surname, byte type, int id, string password, string login) : base(name, surname, type, id, password, login)
         {
             this.Penalty = 0;
         }
 
-        public void BorrowLibraryElement(DateTime date, ushort elementID)
+        public void BorrowLibraryElement(DateTime date, ushort elementID, byte elementType, int borrowID)
         {
-            UserBorrowings.Add(new Borrowing(date, elementID));
+            Borrowing newBorrowing = new Borrowing(date.Date, elementID, elementType, borrowID);
+            UserBorrowings.Add(newBorrowing);
+
+            byte borrowingStatusTmp = newBorrowing.BorrowStatus;
+
+            TextFileHandler.AddNewBorrowingToUserFile(this, date, elementID, elementType, borrowID, borrowingStatusTmp);
+
+            Console.ReadKey();
         }
 
         public void ReturnLibraryElement(DateTime date, int borrowID)
         {
-            UserBorrowings[borrowID].BorrowStatus = false;
+            UserBorrowings[borrowID].BorrowStatus = 0;
         }
 
         public string GetUsersLibraryElementsList()
@@ -45,18 +51,18 @@ namespace ClassLibrary
         {
             public int BorrowID { get; private set; }
             public int ElementID { get; private set; }
+            public byte ElementType { get; private set; } // 1 - book, 2 - movie
             public DateTime BorrowDate { get; private set; }
             public DateTime ReturnDate { get; private set; }
-            public bool BorrowStatus { get; set; }
-
-            private static int currentBorrowID = 0;
-
-            public Borrowing(DateTime date, int elementID)
+            public byte BorrowStatus { get; set; } //0 - available, 1 - pending, 2 - borrowed
+      
+            public Borrowing(DateTime date, int elementID, byte elementType, int borrowID)
             {
                 this.BorrowDate = date;
                 this.ElementID = elementID;
-                this.BorrowID = currentBorrowID++;
-                this.BorrowStatus = true;
+                this.ElementType = elementType;
+                this.BorrowStatus = 1;
+                this.BorrowID = borrowID;
             }
         }
     }
