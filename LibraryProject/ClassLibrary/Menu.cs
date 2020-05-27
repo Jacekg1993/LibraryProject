@@ -54,7 +54,7 @@ namespace ClassLibrary
                 Console.WriteLine($"Witaj {LoggedLibrarian.Name}!");
                 Console.Write("kliknij aby kontynuować");
                 Console.ReadKey();
-                LibrarianMenuView();
+                LibrarianMenuView(LoggedLibrarian);
             }
             else if(byte.Parse(userArguments[3]) == 2)
             {
@@ -103,7 +103,7 @@ namespace ClassLibrary
             return null;
         }
 
-        public static void LibrarianMenuView()
+        public static void LibrarianMenuView(Librarian LoggedLibrarian)
         {
             int librarianMenuSelectedOptionInt = 0;
             LibrarianMenuOption librarianMenuSelectedOption;
@@ -129,7 +129,7 @@ namespace ClassLibrary
                 if (librarianMenuSelectedOptionInt > 0 && librarianMenuSelectedOptionInt < 10)
                 {
                     librarianMenuSelectedOption = (LibrarianMenuOption)librarianMenuSelectedOptionInt;
-                    LibrarianMenuOptionSelection(librarianMenuSelectedOption);
+                    LibrarianMenuOptionSelection(librarianMenuSelectedOption, LoggedLibrarian);
                 }
                 else if (librarianMenuSelectedOptionInt == 10)
                 {
@@ -138,7 +138,7 @@ namespace ClassLibrary
             }
         }
 
-        public static void LibrarianMenuOptionSelection(LibrarianMenuOption option)
+        public static void LibrarianMenuOptionSelection(LibrarianMenuOption option, Librarian LoggedLibrarian)
         {
             switch (option)
             {
@@ -164,6 +164,7 @@ namespace ClassLibrary
                     SearchLibraryElement();
                     break;
                 case LibrarianMenuOption.ApproveBorrow:
+                    ApproveOrRejectBorrowing(LoggedLibrarian.UserID);
                     break;
                 case LibrarianMenuOption.ApproveReturn:
                     break;
@@ -465,6 +466,102 @@ namespace ClassLibrary
             Console.Write("Powrót");
 
             Console.ReadKey();
+        }
+
+        public static void ApproveOrRejectBorrowing(int loggedLibrarianID)
+        {
+            byte librarianRequestSelection = 0;
+
+            Console.Clear();
+
+            Console.WriteLine("Lista zapytań o wypożyczenie:");
+            Console.WriteLine("___________________________");
+            Console.WriteLine(TextFileHandler.GetRequestsListFromFile(loggedLibrarianID));
+
+            Console.WriteLine("1. Wybór zapytania");
+            Console.WriteLine("2. Powrót");
+
+            Console.Write("Wybierz opcje: ");
+            librarianRequestSelection = byte.Parse(Console.ReadLine());
+
+            if (librarianRequestSelection == 1)
+            {              
+                LibrarianRequestMenu(loggedLibrarianID);
+            }
+            else if (librarianRequestSelection == 2)
+            {
+                Console.ReadKey();
+            }
+        }
+
+        public static void LibrarianRequestMenu(int loggedLibrarianID)
+        {
+            byte librarianRequestIdSelection = 0;
+            bool exitMenu = false;
+
+            while (exitMenu == false)
+            {
+                Console.Clear();
+
+                Console.WriteLine(TextFileHandler.GetRequestsListFromFile(loggedLibrarianID));
+                Console.WriteLine("___________________________");
+
+                Console.Write("Wybierz zapytanie: ");
+                librarianRequestIdSelection = byte.Parse(Console.ReadLine());
+
+                if (librarianRequestIdSelection > 0 && librarianRequestIdSelection <= TextFileHandler.GetLastRequestID(loggedLibrarianID))
+                {
+                    string requestData = TextFileHandler.GetRequestDataToString(librarianRequestIdSelection, loggedLibrarianID);
+                    exitMenu = LibrarianRequestAcceptance(requestData);
+                }
+                else 
+                {
+                    Console.WriteLine("Wybrano zły numer zapytania!");
+                    Console.ReadKey();
+                } 
+            }
+        }
+
+        public static bool LibrarianRequestAcceptance(string requestData)
+        {
+            byte librarianRequestSelection = 0;
+            
+            while (true)
+            {
+                Console.Clear();
+
+                Console.WriteLine("___________________________");
+                Console.WriteLine("1. Zaakceptuj");
+                Console.WriteLine("2. Odrzuć");
+
+                Console.Write("Twój wybór: ");
+                librarianRequestSelection = byte.Parse(Console.ReadLine());
+
+                if (librarianRequestSelection == 1)
+                {
+                    string[] requestSeparatedData = requestData.Split(',');
+                    int ordinaryUserID = int.Parse(requestSeparatedData[3]);
+                    int borrowID = TextFileHandler.GetCurrentBorrowingID(ordinaryUserID);                   
+                    DateTime date = DateTime.Now;
+                    ushort elementID = ushort.Parse(requestSeparatedData[3]);
+                    byte elementType = byte.Parse(requestSeparatedData[2]);
+
+                    TextFileHandler.AddNewBorrowingToOrdinaryUserFile(ordinaryUserID, date, elementID, elementType, borrowID, 1);
+                    Console.WriteLine("true");//usun
+                    Console.ReadKey();//usun
+                    return true;
+                } 
+                else if (librarianRequestSelection == 2)
+                {
+                    Console.WriteLine("false");//usun
+                    Console.ReadKey();//usun
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine("Podaj poprawną opcje!");
+                }
+            }
         }
 
         public static void BorrowALibraryElement(OrdinaryUser LoggedOrdinaryUser)

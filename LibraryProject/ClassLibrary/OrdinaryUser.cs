@@ -25,15 +25,15 @@ namespace ClassLibrary
 
         }
 
-        public void BorrowLibraryElement(DateTime date, ushort elementID, byte elementType, int borrowID)
-        {
-            Borrowing newBorrowing = new Borrowing(date, elementID, elementType, borrowID);
-            UserBorrowings.Add(newBorrowing);
+        //public void BorrowLibraryElement(DateTime date, ushort elementID, byte elementType, int borrowID) //byc może nie będzie to potrzebne
+        //{
+        //    Borrowing newBorrowing = new Borrowing(date, elementID, elementType, borrowID);
+        //    UserBorrowings.Add(newBorrowing);
 
-            byte borrowingStatusTmp = newBorrowing.BorrowStatus;
+        //    byte borrowingStatusTmp = newBorrowing.BorrowStatus;
 
-            TextFileHandler.AddNewBorrowingToUserFile(this, date, elementID, elementType, borrowID, borrowingStatusTmp);
-        }
+        //    TextFileHandler.AddNewBorrowingToUserFile(UserID, date, elementID, elementType, borrowID, borrowingStatusTmp);
+        //}
 
         public void ReturnLibraryElement(DateTime date, int borrowID)
         {

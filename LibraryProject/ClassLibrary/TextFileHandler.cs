@@ -591,28 +591,59 @@ namespace ClassLibrary
             return false;
         }
 
-        //public static string GetRequestsListFromFile()
-        //{
-        //    List<string> mrequestListFromFile = File.ReadAllLines(moviesFilePath).ToList();
-        //    string[] requestSeparatedData;
+        public static string GetRequestsListFromFile(int librarianID)
+        {
+            string librarianRequestsFilePath = librariansDirectoryPath + @"\Librarian" + librarianID + @"\Requests_Librarian" + librarianID + ".txt";
+            List<string> requestListFromFile = File.ReadAllLines(librarianRequestsFilePath).ToList();
+            string[] requestSeparatedData;
 
-        //    StringBuilder requestList = new System.Text.StringBuilder();
-        //    requestList.AppendLine("ID\t|ID Elementu\t|Rodzaj elementu\t|Data\t|ID Użytkownika");
+            StringBuilder requestList = new System.Text.StringBuilder();
+            requestList.AppendLine("ID\t|ID Elementu\t|Rodzaj elementu\t|ID Użytkownika|Data\t");
 
-        //    foreach (string line in mrequestListFromFile)
-        //    {
-        //        requestSeparatedData = line.Split(',');
-        //        movieStatus = ShowLibraryElementStatusAsStatement(requestSeparatedData[4]);
-        //        requestList.AppendLine($"{requestSeparatedData[0]}\t|{requestSeparatedData[1]}\t|{requestSeparatedData[2]}\t|{requestSeparatedData[3]}\t|{movieStatus}");
-        //    }
+            foreach (string requestInLine in requestListFromFile)
+            {
+                requestSeparatedData = requestInLine.Split(',');               
+                requestList.AppendLine($"{requestSeparatedData[0]}\t|{requestSeparatedData[1]}\t\t|{requestSeparatedData[2]}\t\t\t|{requestSeparatedData[3]}\t\t|{requestSeparatedData[4]}");
+            }
 
-        //    return requestList.ToString();
-        //}
+            return requestList.ToString();
+        }
+
+        public static int GetLastRequestID(int librarianID)
+        {
+            string librarianRequestsFilePath = librariansDirectoryPath + @"\Librarian" + librarianID + @"\Requests_Librarian" + librarianID + ".txt";
+
+            string lastLine = File.ReadLines(librarianRequestsFilePath).LastOrDefault(); //Reading last line from .txt file
+            if (lastLine != null)
+            {
+                string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
+                return int.Parse(argumentsFromFile[0]);
+            }
+            return -1;           
+        }
+
+        public static string GetRequestDataToString(int requestNumber, int librarianID)
+        {
+            string librarianRequestsFilePath = librariansDirectoryPath + @"\Librarian" + librarianID + @"\Requests_Librarian" + librarianID + ".txt";
+            List<string> requestListFromFile = File.ReadAllLines(librarianRequestsFilePath).ToList();
+            string[] requestSeparatedData;
+
+            foreach (string requestInLine in requestListFromFile)
+            {
+                requestSeparatedData = requestInLine.Split(',');
+                if (int.Parse(requestSeparatedData[0]) == requestNumber)
+                {
+                    return requestInLine;
+                }
+            }
+
+            return null;
+        }
 
         //BORROW METHODS
-        public static int GetCurrentBorrowingID(OrdinaryUser ordinaryUser)
+        public static int GetCurrentBorrowingID(int ordinaryUserID)
         {
-            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUser.Login + @"\Borrowings_" + ordinaryUser.Login + ".txt";
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
 
             string lastLine = File.ReadLines(borrowingListPath).LastOrDefault(); //Reading last line from .txt file
             if (lastLine != null)
@@ -623,16 +654,25 @@ namespace ClassLibrary
 
             return 0;
         }
-
-        public static void AddNewBorrowingToUserFile(OrdinaryUser ordinaryUser, DateTime date, ushort elementID, byte elementType, int borrowID, byte borrowingStatus)
+        
+        public static void AddNewBorrowingToOrdinaryUserFile(int ordinaryUserID, DateTime date, ushort elementID, byte elementType, int borrowID, byte borrowingStatus)
         {
-            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUser.Login + @"\Borrowings_" + ordinaryUser.Login + ".txt";
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
 
-            File.AppendAllText(borrowingListPath, $"\n{borrowID},{elementID},{elementType},{date},{borrowingStatus}");
+            File.AppendAllText(borrowingListPath, $"{borrowID},{elementID},{elementType},{date},{borrowingStatus}\n");
 
-            ChangeBookStatusToPending(elementID);
+            //ChangeBookStatusToPending(elementID);
         }
-    
+
+
+        //public static void AddNewBorrowingToUserFile(string requestData, int ordinaryUserID)
+        //{
+        //    string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + ordinaryUserID + @"\Borrowings_" + ordinaryUserID + ".txt";
+
+        //    File.AppendAllText(borrowingListPath, $"\n{requestData}");
+
+        //    //ChangeBookStatusToPending(elementID);
+        //}
 
         //CLEAR ALL DATA BASE
         public static void ClearData()
