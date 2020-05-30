@@ -487,6 +487,7 @@ namespace ClassLibrary
             if (librarianRequestSelection == 1)
             {              
                 LibrarianRequestMenu(loggedLibrarianID);
+                ApproveOrRejectBorrowing(loggedLibrarianID);
             }
             else if (librarianRequestSelection == 2)
             {
@@ -541,21 +542,30 @@ namespace ClassLibrary
                 {
                     string[] requestSeparatedData = requestData.Split(',');
                     int ordinaryUserID = int.Parse(requestSeparatedData[3]);
-                    int borrowID = TextFileHandler.GetCurrentBorrowingID(ordinaryUserID);                   
+                    int borrowID = TextFileHandler.GetCurrentBorrowingID(ordinaryUserID) + 1;                   
                     DateTime date = DateTime.Now;
-                    ushort elementID = ushort.Parse(requestSeparatedData[3]);
+                    ushort elementID = ushort.Parse(requestSeparatedData[1]);
                     byte elementType = byte.Parse(requestSeparatedData[2]);
 
                     TextFileHandler.AddNewBorrowingToOrdinaryUserFile(ordinaryUserID, date, elementID, elementType, borrowID, 1);
-                    Console.WriteLine("true");//usun
+
+                    if (elementType == 1)
+                    {
+                        TextFileHandler.ChangeBookStatusToBorrowed(elementID);
+                    }
+                    else
+                    {
+                        TextFileHandler.ChangeMovieStatusToBorrowed(elementID);
+                    }
+                    Console.WriteLine("Wypożyczenie zostało zaakceptowane");//usun
                     Console.ReadKey();//usun
                     return true;
                 } 
                 else if (librarianRequestSelection == 2)
                 {
-                    Console.WriteLine("false");//usun
+                    Console.WriteLine("Wypożyczenie zostało odrzucone");//usun
                     Console.ReadKey();//usun
-                    return false;
+                    return true;
                 }
                 else
                 {
@@ -588,7 +598,7 @@ namespace ClassLibrary
 
                     //LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
 
-                    TextFileHandler.BorrowRequest(DateTime.Now, id, type, LoggedOrdinaryUser.UserID);
+                    TextFileHandler.BorrowRequestAddToFile(DateTime.Now, id, type, LoggedOrdinaryUser.UserID);
                     TextFileHandler.ChangeBookStatusToPending(id);
 
                     Console.WriteLine("Element oczekuje na zatwierdzenie");
@@ -611,7 +621,7 @@ namespace ClassLibrary
 
                     //LoggedOrdinaryUser.BorrowLibraryElement(DateTime.Now, id, type, availableBorrowingIdTmp);
 
-                    TextFileHandler.BorrowRequest(DateTime.Now, id, type, LoggedOrdinaryUser.UserID);
+                    TextFileHandler.BorrowRequestAddToFile(DateTime.Now, id, type, LoggedOrdinaryUser.UserID);
                     TextFileHandler.ChangeMovieStatusToPending(id);
 
                     Console.WriteLine("Element oczekuje na zatwierdzenie");

@@ -1,6 +1,6 @@
-1, Gra o tron,fantasy,500,0
+1, Gra o tron,fantasy,500,2
 2, Starcie królów,fantasy,605,0
-3, Nawałnica mieczy,fantasy,679,1
+3, Nawałnica mieczy,fantasy,679,2
 4, Uczta dla wron,fantasy,1029,0
 5, Taniec ze smokami,fantasy,849,1
 6, Władca pierścieni,fantasy,743,0
