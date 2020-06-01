@@ -13,8 +13,7 @@ namespace ClassLibrary
         GetUsersList,
         GetLibrarianElementsList,
         SearchLibraryElement,
-        ApproveBorrow,
-        ApproveReturn,
+        ApproveBorrow,     
         LogOut
     }
 
@@ -120,18 +119,17 @@ namespace ClassLibrary
                 Console.WriteLine("6. Lista elementów w zbiorze");
                 Console.WriteLine("7. Wyszukawiarka elementów w zbiorze");
                 Console.WriteLine("8. Zatwierdź wypożyczenie");
-                Console.WriteLine("9. Zatwierdź zwrócenie");
-                Console.WriteLine("10. Wyloguj");
+                Console.WriteLine("9. Wyloguj");
 
                 Console.Write("Wybierz opcje: ");
                 librarianMenuSelectedOptionInt = int.Parse(Console.ReadLine());
 
-                if (librarianMenuSelectedOptionInt > 0 && librarianMenuSelectedOptionInt < 10)
+                if (librarianMenuSelectedOptionInt > 0 && librarianMenuSelectedOptionInt < 9)
                 {
                     librarianMenuSelectedOption = (LibrarianMenuOption)librarianMenuSelectedOptionInt;
                     LibrarianMenuOptionSelection(librarianMenuSelectedOption, LoggedLibrarian);
                 }
-                else if (librarianMenuSelectedOptionInt == 10)
+                else if (librarianMenuSelectedOptionInt == 9)
                 {
                     LogInView();
                 } 
@@ -165,8 +163,6 @@ namespace ClassLibrary
                     break;
                 case LibrarianMenuOption.ApproveBorrow:
                     ApproveOrRejectBorrowing(LoggedLibrarian.UserID);
-                    break;
-                case LibrarianMenuOption.ApproveReturn:
                     break;
                 default:
                     break;
@@ -215,10 +211,10 @@ namespace ClassLibrary
                     BorrowALibraryElement(LoggedOrdinaryUser);
                     break;
                 case OrdinaryUserMenuOption.Return:
-                    
+                    ReturnLibraryElement(LoggedOrdinaryUser);
                     break;
                 case OrdinaryUserMenuOption.GetBorrowingsList:
-                    
+                    GetAllOrdinaryUserBorrowingsList(LoggedOrdinaryUser.UserID);
                     break;
                 case OrdinaryUserMenuOption.SettlePenalties:
                     
@@ -541,6 +537,7 @@ namespace ClassLibrary
                 if (librarianRequestSelection == 1)
                 {
                     string[] requestSeparatedData = requestData.Split(',');
+                    int requestID = int.Parse(requestSeparatedData[0]);
                     int ordinaryUserID = int.Parse(requestSeparatedData[3]);
                     int borrowID = TextFileHandler.GetCurrentBorrowingID(ordinaryUserID) + 1;                   
                     DateTime date = DateTime.Now;
@@ -548,6 +545,7 @@ namespace ClassLibrary
                     byte elementType = byte.Parse(requestSeparatedData[2]);
 
                     TextFileHandler.AddNewBorrowingToOrdinaryUserFile(ordinaryUserID, date, elementID, elementType, borrowID, 1);
+                    TextFileHandler.RemoveRequest(requestID);
 
                     if (elementType == 1)
                     {
@@ -557,14 +555,30 @@ namespace ClassLibrary
                     {
                         TextFileHandler.ChangeMovieStatusToBorrowed(elementID);
                     }
-                    Console.WriteLine("Wypożyczenie zostało zaakceptowane");//usun
-                    Console.ReadKey();//usun
+                    Console.WriteLine("Wypożyczenie zostało zaakceptowane");
+                    Console.ReadKey();
                     return true;
                 } 
                 else if (librarianRequestSelection == 2)
                 {
-                    Console.WriteLine("Wypożyczenie zostało odrzucone");//usun
-                    Console.ReadKey();//usun
+                    string[] requestSeparatedData = requestData.Split(',');
+                    int requestID = int.Parse(requestSeparatedData[0]);
+                    ushort elementID = ushort.Parse(requestSeparatedData[1]);
+                    byte elementType = byte.Parse(requestSeparatedData[2]);
+
+                    if (elementType == 1)
+                    {
+                        TextFileHandler.ChangeBookStatusToAvailable(elementID);
+                    }
+                    else
+                    {
+                        TextFileHandler.ChangeMovieStatusToAvailable(elementID);
+                    }
+
+                    Console.WriteLine("Wypożyczenie zostało odrzucone");
+                    TextFileHandler.RemoveRequest(requestID);
+
+                    Console.ReadKey();
                     return true;
                 }
                 else
@@ -643,6 +657,52 @@ namespace ClassLibrary
             Console.ReadKey();
         }
 
-    }
+        public static void ReturnLibraryElement(OrdinaryUser LoggedOrdinaryUser)
+        {
+            int borrowingIdToReturn;
 
+            Console.Clear();
+
+            Console.WriteLine(TextFileHandler.GetOrdinaryUserBorrowingsListFromFile(LoggedOrdinaryUser.UserID));
+
+            Console.Write("Który element chcesz zwrócić?[Podaj ID]: ");
+            borrowingIdToReturn = int.Parse(Console.ReadLine());
+
+            if (TextFileHandler.CheckReturnValidation(borrowingIdToReturn, LoggedOrdinaryUser.UserID))
+            {
+                TextFileHandler.ChangeBorrowingStatusToReturned(borrowingIdToReturn, LoggedOrdinaryUser.UserID);
+
+                if (TextFileHandler.GetBorrowingElementType(borrowingIdToReturn, LoggedOrdinaryUser.UserID) == 1)
+                {
+                    int bookID = TextFileHandler.GetBorrowingElementId(borrowingIdToReturn, LoggedOrdinaryUser.UserID);
+                    TextFileHandler.ChangeBookStatusToAvailable(bookID);
+                }
+                else if (TextFileHandler.GetBorrowingElementType(borrowingIdToReturn, LoggedOrdinaryUser.UserID) == 2)
+                {
+                    int movieID = TextFileHandler.GetBorrowingElementId(borrowingIdToReturn, LoggedOrdinaryUser.UserID);
+                    TextFileHandler.ChangeMovieStatusToAvailable(movieID);
+                }
+                Console.WriteLine("Element oddano do zbioru biblioteki");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("Podano niepoprawne ID!");
+                Console.ReadKey();
+            }
+        }
+
+        public static void GetAllOrdinaryUserBorrowingsList(int ordinaryUserID)
+        {
+            Console.Clear();
+
+            Console.WriteLine("Lista wypożyczeń: ");
+            Console.WriteLine("______________________________________________________");
+            Console.WriteLine(TextFileHandler.GetOrdinaryUserBorrowingsListFromFile(ordinaryUserID));
+
+            Console.WriteLine("Powrót");
+
+            Console.ReadKey();
+        }
+    }
 }

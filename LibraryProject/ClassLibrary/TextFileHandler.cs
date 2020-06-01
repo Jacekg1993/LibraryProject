@@ -27,7 +27,7 @@ namespace ClassLibrary
         //BOOK METHODS
         public static Book CreateNewBook(string title, string section, int pages)
         {
-            File.AppendAllText(booksFilePath, $"{GetAvailableBookID() + 1}, {title},{section},{pages},0\n"); //Add new line to .txt file           
+            File.AppendAllText(booksFilePath, $"{GetAvailableBookID() + 1},{title},{section},{pages},0\n"); //Add new line to .txt file           
             return new Book(title, section, GetAvailableBookID() + 1, pages);
         }
 
@@ -640,52 +640,37 @@ namespace ClassLibrary
             return null;
         }
 
-        //public static bool RemoveRequest(int librarianID)
-        //{
-        //    //string requestListPath = librariansDirectoryPath + @"\Librarian" + librarianID + @"\Requests_Librarian" + librarianID + ".txt";
-        //    //List<string> bookList = File.ReadAllLines(requestListPath).ToList();
+        public static void RemoveRequest(int requestID)
+        {
+            List<string> librarianListFromFile = File.ReadAllLines(librariansListPath).ToList();      
 
-        //    //int indexToRemove;
+            for (int i = 0; i < librarianListFromFile.Count; i++)
+            {
+                string[] parts = librarianListFromFile[i].Split(',');
+                string requestListPath = librariansDirectoryPath + @"\Librarian" + parts[0] + @"\Requests_Librarian" + parts[0] + ".txt";
 
-        //    //indexToRemove = FindBookIndexToRemove(bookList, librarianID);
+                List<string> requestList = File.ReadAllLines(requestListPath).ToList();
+                int requestIndexToRemove = FindRequestIndexToRemove(requestList, requestID);
+                requestList.RemoveAt(requestIndexToRemove);
+                File.WriteAllLines(requestListPath, requestList);
+            }
+        }
 
-        //    //if (indexToRemove > -1)
-        //    //{
-        //    //    bookList.RemoveAt(indexToRemove);
-        //    //    File.WriteAllLines(booksFilePath, bookList);
+        public static int FindRequestIndexToRemove(List<string> requestList, int requestID)
+        {
+            string[] requestDataTmp;
 
-        //    //    return true;
-        //    //}
+            for (int i = 0; i < requestList.Count; i++)
+            {
+                requestDataTmp = requestList[i].Split(',');
 
-        //    List<string> librarianListFromFile = File.ReadAllLines(librariansListPath).ToList();
-
-        //    for (int i = 0; i < librarianListFromFile.Count; i++)
-        //    {
-        //        string[] parts = librarianListFromFile[i].Split(',');
-        //        string requestListPath = librariansDirectoryPath + @"\Librarian" + parts[0] + @"\Requests_Librarian" + parts[0] + ".txt";
-
-        //        int availableRequestID = GetCurrentRequestID(int.Parse(parts[0]));
-        //        File.AppendAllText(requestListPath, $"{availableRequestID + 1},{elementID},{elementType},{ordinaryUserID},{DateTime.Now}\n");
-        //    }
-
-        //    return false;
-        //}
-
-        //public static int FindRequestIndexToRemove(List<string> requestList, int requestID)
-        //{
-        //    string[] requestDataTmp;
-
-        //    for (int i = 0; i < requestList.Count; i++)
-        //    {
-        //        requestDataTmp = requestList[i].Split(',');
-
-        //        if (int.Parse(requestDataTmp[0]) == requestID)
-        //        {
-        //            return i;
-        //        }
-        //    }
-        //    return -1;
-        //}
+                if (int.Parse(requestDataTmp[0]) == requestID)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
         //BORROW METHODS
         public static int GetCurrentBorrowingID(int ordinaryUserID)
@@ -729,6 +714,25 @@ namespace ClassLibrary
             File.WriteAllLines(booksFilePath, bookList);
         }
 
+        public static void ChangeBookStatusToAvailable(int bookID)
+        {
+            List<string> bookList = File.ReadAllLines(booksFilePath).ToList();
+
+            string[] bookDataTmp;
+            for (int i = 0; i < bookList.Count; i++)
+            {
+                bookDataTmp = bookList[i].Split(',');
+
+                if (int.Parse(bookDataTmp[0]) == bookID)
+                {
+                    bookDataTmp[4] = "0";
+                    bookList[i] = string.Join(",", bookDataTmp[0], bookDataTmp[1], bookDataTmp[2], bookDataTmp[3], bookDataTmp[4]);
+                }
+            }
+
+            File.WriteAllLines(booksFilePath, bookList);
+        }
+
         public static void ChangeMovieStatusToBorrowed(int movieID)
         {
             List<string> movieList = File.ReadAllLines(moviesFilePath).ToList();
@@ -746,6 +750,171 @@ namespace ClassLibrary
             }
 
             File.WriteAllLines(moviesFilePath, movieList);
+        }
+
+        public static void ChangeMovieStatusToAvailable(int movieID)
+        {
+            List<string> movieList = File.ReadAllLines(moviesFilePath).ToList();
+
+            string[] movieDataTmp;
+            for (int i = 0; i < movieList.Count; i++)
+            {
+                movieDataTmp = movieList[i].Split(',');
+
+                if (int.Parse(movieDataTmp[0]) == movieID)
+                {
+                    movieDataTmp[4] = "0";
+                    movieList[i] = string.Join(",", movieDataTmp[0], movieDataTmp[1], movieDataTmp[2], movieDataTmp[3], movieDataTmp[4]);
+                }
+            }
+
+            File.WriteAllLines(moviesFilePath, movieList);
+        }
+
+        public static string GetOrdinaryUserBorrowingsListFromFile(int ordinaryUserID)
+        {
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
+            List<string> borrowingsListFromFile = File.ReadAllLines(borrowingListPath).ToList();
+            string[] borrowingSeparatedData;
+            string borrowingStatus = null;
+            string borrowingElementTitle = null;
+
+            StringBuilder borrowingList = new System.Text.StringBuilder();
+            borrowingList.AppendLine("ID\t|Tytuł\t|Rodzaj elementu\t|Data|Status\t");
+
+            foreach (string requestInLine in borrowingsListFromFile)
+            {
+                borrowingSeparatedData = requestInLine.Split(',');
+                borrowingStatus = ShowBorrowingStatusAsStatement(borrowingSeparatedData[4]);
+                borrowingElementTitle = ShowBorrowingIdAsTitle(byte.Parse(borrowingSeparatedData[2]), int.Parse(borrowingSeparatedData[1]));
+
+                borrowingList.AppendLine($"{borrowingSeparatedData[0]}\t|{borrowingElementTitle}\t\t|{borrowingSeparatedData[2]}\t\t\t|{borrowingSeparatedData[3]}\t\t|{borrowingStatus}");
+            }
+
+            return borrowingList.ToString();
+        }
+
+        public static string ShowBorrowingStatusAsStatement(string borrowingStatus)
+        {
+            if (borrowingStatus == "0")
+            {
+                return "Zwrócona";
+            }
+            else if (borrowingStatus == "1")
+            {
+                return "Wypożyczona";
+            }
+            return "Błąd";
+        }
+
+        public static string ShowBorrowingIdAsTitle(byte elementType, int elementID)
+        {
+            string[] separatedData;
+
+            if (elementType == 1)
+            {
+                List<string> bookList = File.ReadAllLines(booksFilePath).ToList();
+
+                foreach (string book in bookList)
+                {
+                    separatedData = book.Split(',');
+                    if (int.Parse(separatedData[0]) == elementID)
+                    {
+                        return separatedData[1];
+                    }
+                }
+            }
+            else if (elementType == 2)
+            {
+                List<string> movieList = File.ReadAllLines(moviesFilePath).ToList();
+
+                foreach (string movie in movieList)
+                {
+                    separatedData = movie.Split(',');
+                    if (int.Parse(separatedData[0]) == elementID)
+                    {
+                        return separatedData[1];
+                    }
+                }
+            }
+            return "Błąd";
+        }
+
+        public static bool CheckReturnValidation(int borrowID, int ordinaryUserID)
+        {
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
+            List<string> borrowingsListFromFile = File.ReadAllLines(borrowingListPath).ToList();
+            string[] separatedData;
+
+            foreach (string borrowing in borrowingsListFromFile)
+            {
+                separatedData = borrowing.Split(',');
+
+                if ((int.Parse(separatedData[0]) == borrowID) && (separatedData[4] == "1")) 
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static void ChangeBorrowingStatusToReturned(int borrowID, int ordinaryUserID)
+        {
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
+            List<string> borrowingsList = File.ReadAllLines(borrowingListPath).ToList();
+
+            string[] borrowingDataTmp;
+            for (int i = 0; i < borrowingsList.Count; i++)
+            {
+                borrowingDataTmp = borrowingsList[i].Split(',');
+
+                if (int.Parse(borrowingDataTmp[0]) == borrowID)
+                {
+                    borrowingDataTmp[4] = "0";
+                    borrowingsList[i] = string.Join(",", borrowingDataTmp[0], borrowingDataTmp[1], borrowingDataTmp[2], borrowingDataTmp[3], borrowingDataTmp[4]);
+                }
+            }
+
+            File.WriteAllLines(borrowingListPath, borrowingsList);
+        }
+
+        public static byte GetBorrowingElementType(int borrowID, int ordinaryUserID)
+        {
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
+            List<string> borrowingsListFromFile = File.ReadAllLines(borrowingListPath).ToList();
+            string[] separatedData;
+
+            foreach (string borrowing in borrowingsListFromFile)
+            {
+                separatedData = borrowing.Split(',');
+
+                if (int.Parse(separatedData[0]) == borrowID)
+                {
+                    return byte.Parse(separatedData[2]);
+                }
+            }
+
+            return 0;
+        }
+
+        public static int GetBorrowingElementId(int borrowID, int ordinaryUserID)
+        {
+            string borrowingListPath = ordinaryUsersDirectoryPath + @"\" + "OrdinaryUser" + ordinaryUserID + @"\Borrowings_OrdinaryUser" + ordinaryUserID + ".txt";
+            List<string> borrowingsListFromFile = File.ReadAllLines(borrowingListPath).ToList();
+            string[] separatedData;
+
+            foreach (string borrowing in borrowingsListFromFile)
+            {
+                separatedData = borrowing.Split(',');
+
+                if (int.Parse(separatedData[0]) == borrowID)
+                {
+                    return int.Parse(separatedData[1]);
+                }
+            }
+
+            return 0;
         }
 
         //CLEAR ALL DATA BASE

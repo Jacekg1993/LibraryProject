@@ -1,6 +1,6 @@
-1,Ojciec chrzestny,kryminał,156,1
-2,Ojciec chrzestny 2,kryminał,189,1
-3,Ojciec chrzestny 3,kryminał,165,0
-4,Władca pierścieni: drużyna pierścienia,fantasy,196,0
+1,Ojciec chrzestny,kryminał,156,0
+2,Ojciec chrzestny 2,kryminał,189,2
+3,Ojciec chrzestny 3,kryminał,165,2
+4,Władca pierścieni: drużyna pierścienia,fantasy,196,2
 5,Władca pierścieni: dwie wieże,fantasy,204,0
 6,Władca pierścieni: powrót króla,fantasy,176,0

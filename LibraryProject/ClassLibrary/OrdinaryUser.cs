@@ -57,7 +57,7 @@ namespace ClassLibrary
             public byte ElementType { get; private set; } // 1 - book, 2 - movie
             public DateTime BorrowDate { get; private set; }
             public DateTime ReturnDate { get; private set; }
-            public byte BorrowStatus { get; set; } //0 - pending to return, 1 - borrowed
+            public byte BorrowStatus { get; set; } //0 - returned, 1 - borrowed
       
             public Borrowing(DateTime date, int elementID, byte elementType, int borrowID)
             {
