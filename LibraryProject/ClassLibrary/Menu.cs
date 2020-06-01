@@ -122,7 +122,16 @@ namespace ClassLibrary
                 Console.WriteLine("9. Wyloguj");
 
                 Console.Write("Wybierz opcje: ");
-                librarianMenuSelectedOptionInt = int.Parse(Console.ReadLine());
+                try
+                {
+                    librarianMenuSelectedOptionInt = int.Parse(Console.ReadLine());
+                }
+                catch (FormatException ex)
+                {
+
+                    Console.WriteLine("Podano nieprawidłową wartość!");
+                    Console.ReadKey();
+                }
 
                 if (librarianMenuSelectedOptionInt > 0 && librarianMenuSelectedOptionInt < 9)
                 {

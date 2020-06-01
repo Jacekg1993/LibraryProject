@@ -1,2 +1,1 @@
 1,Jacek,Gos,1
-2,Mama,Gos,1

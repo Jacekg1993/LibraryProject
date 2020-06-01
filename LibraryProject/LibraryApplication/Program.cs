@@ -40,8 +40,8 @@ namespace LibraryApplication
             ////listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Wojciech", "Gos", "a"));
             ////listusers.Add(TextFileHandler.CreateNewOrdinaryUser("Dominik", "Gos", "a"));
 
-            ////List<Librarian> listlibrarians = new List<Librarian>();
-            ////listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Jacek", "Gos", "a"));
+            //List<Librarian> listlibrarians = new List<Librarian>();
+            //listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Jacek", "Gos", "a"));
             ////listlibrarians.Add(TextFileHandler.CreateNewLibrarian("Mama", "Gos", "a"));
 
             Menu.LogInView();
