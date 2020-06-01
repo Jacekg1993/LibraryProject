@@ -126,9 +126,8 @@ namespace ClassLibrary
                 {
                     librarianMenuSelectedOptionInt = int.Parse(Console.ReadLine());
                 }
-                catch (FormatException ex)
+                catch (FormatException)
                 {
-
                     Console.WriteLine("Podano nieprawidłową wartość!");
                     Console.ReadKey();
                 }
@@ -235,15 +234,22 @@ namespace ClassLibrary
 
         public static void CreateNewUser()
         {
-            byte type;
+            byte type = 0;
 
             Console.Clear();
             Console.WriteLine("Ekran tworzenia użytkownika");
             Console.WriteLine("___________________________");
 
             Console.Write("Podaj typ użytkownika:\nBibliotekarz: 1\nZwykły użytkownik: 2\n");
-            type = byte.Parse(Console.ReadLine());
-
+            try
+            {
+                type = byte.Parse(Console.ReadLine());
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Podano nieprawidłową wartość!");
+                Console.ReadKey();
+            }
             if (type == 1)
             {
                 //TextFileHandler.CreateNewLibrarian(); 
@@ -283,7 +289,7 @@ namespace ClassLibrary
         {
             string userToDeleteLogin;
             string[] userDataSplit;
-            int userToDeleteId;
+            int userToDeleteId = 0;
 
             Console.Clear();
 
@@ -294,7 +300,20 @@ namespace ClassLibrary
             userToDeleteLogin = Console.ReadLine();
 
             userDataSplit = userToDeleteLogin.Split('r');
-            userToDeleteId = int.Parse(userDataSplit[3]);
+            try
+            {
+                userToDeleteId = int.Parse(userDataSplit[3]);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Console.WriteLine("Podano nieprawidłową nazwę użytkownika!");
+                Console.ReadKey();
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Podano nieprawidłową nazwę użytkownika!");
+                Console.ReadKey();
+            }
 
             if (TextFileHandler.RemoveOrdinaryUserDataFromFile(userToDeleteId, userToDeleteLogin))
             {
