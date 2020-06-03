@@ -6,9 +6,9 @@ namespace ClassLibrary
 {
     public class Book : LibraryCollectionElement
     {
-        public int PageAmount { get; private set; }
+        public uint PageAmount { get; private set; }
    
-        public Book(string title, string section, int ID, int pageAmount ) : base(title, section, ID)
+        public Book(string title, string section, int ID, uint pageAmount ) : base(title, section, ID)
         {
             this.PageAmount = pageAmount;
         }

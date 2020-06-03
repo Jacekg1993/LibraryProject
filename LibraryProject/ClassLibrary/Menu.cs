@@ -240,15 +240,16 @@ namespace ClassLibrary
             Console.WriteLine("Ekran tworzenia użytkownika");
             Console.WriteLine("___________________________");
 
-            Console.Write("Podaj typ użytkownika:\nBibliotekarz: 1\nZwykły użytkownik: 2\n");
+            Console.WriteLine("Podaj typ użytkownika:\nBibliotekarz: 1\nZwykły użytkownik: 2");
+            Console.WriteLine("_______________________\nPowrót: 3");
+
             try
             {
                 type = byte.Parse(Console.ReadLine());
             }
-            catch (FormatException ex)
+            catch (Exception)
             {
-                Console.WriteLine("Podano nieprawidłową wartość!");
-                Console.ReadKey();
+                
             }
             if (type == 1)
             {
@@ -277,9 +278,14 @@ namespace ClassLibrary
                 Console.WriteLine("Nowy użytkownik dodany pomyślnie");
                 Console.ReadKey();
             }
+            else if (type == 3)
+            {
+                Console.ReadKey();
+                return;
+            }
             else
             {
-                Console.WriteLine("Podano zły typ użytkownika!");
+                Console.WriteLine("Podano nieprawidłowy typ użytkownika!");
                 Console.ReadKey();
                 CreateNewUser();
             }
@@ -329,20 +335,29 @@ namespace ClassLibrary
 
         public static void AddNewLibraryElement()
         {
-            byte type;
+            byte type = 0;
 
             Console.Clear();
             Console.WriteLine("Ekran dodawania nowego elementu do zbioru");
             Console.WriteLine("___________________________");
 
-            Console.Write("Podaj typ elementu:\nKsiążka: 1\nFilm: 2\n");
-            type = byte.Parse(Console.ReadLine());
+            Console.WriteLine("Podaj typ elementu:\nKsiążka: 1\nFilm: 2");
+            Console.WriteLine("_______________________\nPowrót: 3");
 
+            try
+            {
+                type = byte.Parse(Console.ReadLine());
+
+            }
+            catch (Exception)
+            {
+                
+            }
             if (type == 1)
             {
                 string title;
                 string section;
-                int pages;
+                uint pages = 0;
 
                 Console.Write("Tytuł: ");
                 title = Console.ReadLine();
@@ -351,7 +366,16 @@ namespace ClassLibrary
                 section = Console.ReadLine();
 
                 Console.Write("Ilość stron: ");
-                pages = int.Parse(Console.ReadLine());
+                try
+                {
+                    pages = uint.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Console.ReadKey();
+                    return;
+                }
 
                 TextFileHandler.CreateNewBook(title, section, pages);
 
@@ -362,7 +386,7 @@ namespace ClassLibrary
             {
                 string title;
                 string section;
-                int duration;
+                uint duration = 0;
 
                 Console.Write("Tytuł: ");
                 title = Console.ReadLine();
@@ -371,12 +395,26 @@ namespace ClassLibrary
                 section = Console.ReadLine();
 
                 Console.Write("Czas trwania [minuty]: ");
-                duration = int.Parse(Console.ReadLine());
+                try
+                {
+                    duration = uint.Parse(Console.ReadLine());
 
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Console.ReadKey();
+                    return;
+                }
                 TextFileHandler.CreateNewMovie(title, section, duration);
 
                 Console.WriteLine("Element dodano pomyślnie");
                 Console.ReadKey();
+            }
+            else if (type == 3)
+            {
+                Console.ReadKey();
+                return;
             }
             else
             {
@@ -388,20 +426,37 @@ namespace ClassLibrary
 
         public static void RemoveLibraryElement()
         {
-            byte type;
-            int id;
+            byte type = 0;
+            int id = 0;
 
             Console.Clear();
             Console.WriteLine("Ekran usuwanie elementu zbioru");
             Console.WriteLine("___________________________");
 
-            Console.Write("Podaj typ elementu:\nKsiążka: 1\nFilm: 2\n");
-            type = byte.Parse(Console.ReadLine());
+            Console.WriteLine("Podaj typ elementu:\nKsiążka: 1\nFilm: 2");
+            Console.WriteLine("_______________________\nPowrót: 3");
 
+            try
+            {
+                type = byte.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+
+            }
             if (type == 1)
             {
                 Console.Write("Podaj ID książki: ");
-                id = int.Parse(Console.ReadLine());
+                try
+                {
+                    id = int.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Console.ReadKey();
+                    return;
+                }
 
                 if (TextFileHandler.RemoveBook(id))
                 {
@@ -417,8 +472,17 @@ namespace ClassLibrary
             else if (type == 2)
             {
                 Console.Write("Podaj ID filmu: ");
-                id = int.Parse(Console.ReadLine());
-               
+                try
+                {
+                    id = int.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Console.ReadKey();
+                    return;
+                }
+
                 if (TextFileHandler.RemoveMovie(id))
                 {
                     Console.WriteLine("Film usunięto ze zbioru");
@@ -429,10 +493,15 @@ namespace ClassLibrary
                     Console.WriteLine("Coś poszło nie tak");
                     Console.ReadKey();
                 }
-            }               
+            }
+            else if (type == 3)
+            {
+                Console.ReadKey();
+                return;
+            }
             else
             {
-                Console.WriteLine("Podano zły typ elementu!");
+                Console.WriteLine("Podano nieprawidłowy typ elementu!");
                 Console.ReadKey();
                 RemoveLibraryElement();
             }

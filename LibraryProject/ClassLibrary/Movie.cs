@@ -6,9 +6,9 @@ namespace ClassLibrary
 {
     public class Movie : LibraryCollectionElement
     {
-        public int Duration { get; private set; }
+        public uint Duration { get; private set; }
 
-        public Movie(string title, string section, int ID, int duration ) : base(title, section, ID)
+        public Movie(string title, string section, int ID, uint duration ) : base(title, section, ID)
         {
             this.Duration = duration;
         }

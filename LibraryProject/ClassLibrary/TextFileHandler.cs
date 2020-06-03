@@ -25,7 +25,7 @@ namespace ClassLibrary
         static List<string> moviesFileLines = File.ReadAllLines(moviesFilePath).ToList();
 
         //BOOK METHODS
-        public static Book CreateNewBook(string title, string section, int pages)
+        public static Book CreateNewBook(string title, string section, uint pages)
         {
             File.AppendAllText(booksFilePath, $"{GetAvailableBookID() + 1},{title},{section},{pages},0\n"); //Add new line to .txt file           
             return new Book(title, section, GetAvailableBookID() + 1, pages);
@@ -137,7 +137,7 @@ namespace ClassLibrary
 
         
         //MOVIE METHODS
-        public static Movie CreateNewMovie(string title, string section, int duration)
+        public static Movie CreateNewMovie(string title, string section, uint duration)
         {
             File.AppendAllText(moviesFilePath, $"{GetAvailableMovieID() + 1},{title},{section},{duration},0\n"); //Add new line to .txt file           
             return new Movie(title, section, GetAvailableMovieID() + 1, duration);
