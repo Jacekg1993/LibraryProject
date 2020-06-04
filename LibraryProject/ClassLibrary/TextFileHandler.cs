@@ -609,6 +609,25 @@ namespace ClassLibrary
             return requestList.ToString();
         }
 
+        public static bool CheckByIdIfRequestExists(int librarianID, int requestID)
+        {
+            string librarianRequestsFilePath = librariansDirectoryPath + @"\Librarian" + librarianID + @"\Requests_Librarian" + librarianID + ".txt";
+            List<string> requestListFromFile = File.ReadAllLines(librarianRequestsFilePath).ToList();
+            string[] requestSeparatedData;
+
+            foreach (string requestInLine in requestListFromFile)
+            {
+                requestSeparatedData = requestInLine.Split(',');
+
+                if (int.Parse(requestSeparatedData[0]) == requestID)
+                {
+                    return true;
+                }
+            }
+
+            return false;           
+        }
+
         public static int GetLastRequestID(int librarianID)
         {
             string librarianRequestsFilePath = librariansDirectoryPath + @"\Librarian" + librarianID + @"\Requests_Librarian" + librarianID + ".txt";
@@ -619,7 +638,7 @@ namespace ClassLibrary
                 string[] argumentsFromFile = lastLine.Split(','); //Split this line into separated variables which will be used as an arguments
                 return int.Parse(argumentsFromFile[0]);
             }
-            return -1;           
+            return -1;
         }
 
         public static string GetRequestDataToString(int requestNumber, int librarianID)

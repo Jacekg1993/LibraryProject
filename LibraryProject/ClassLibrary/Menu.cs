@@ -575,12 +575,28 @@ namespace ClassLibrary
             Console.WriteLine("2. Powrót");
 
             Console.Write("Wybierz opcje: ");
-            librarianRequestSelection = byte.Parse(Console.ReadLine());
+            try
+            {
+                librarianRequestSelection = byte.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Błąd!");
+                Console.ReadKey();
+                return;
+            }
 
             if (librarianRequestSelection == 1)
-            {              
-                LibrarianRequestMenu(loggedLibrarianID);
-                ApproveOrRejectBorrowing(loggedLibrarianID);
+            {
+                if (TextFileHandler.GetLastRequestID(loggedLibrarianID) > 0)
+                {
+                    LibrarianRequestMenu(loggedLibrarianID);
+                    ApproveOrRejectBorrowing(loggedLibrarianID);
+                }
+
+                Console.WriteLine("Brak zapytań!");
+                Console.ReadKey();
+                //return;
             }
             else if (librarianRequestSelection == 2)
             {
@@ -601,12 +617,26 @@ namespace ClassLibrary
                 Console.WriteLine("___________________________");
 
                 Console.Write("Wybierz zapytanie: ");
-                librarianRequestIdSelection = byte.Parse(Console.ReadLine());
-
-                if (librarianRequestIdSelection > 0 && librarianRequestIdSelection <= TextFileHandler.GetLastRequestID(loggedLibrarianID))
+                try
+                {
+                    librarianRequestIdSelection = byte.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Błąd!");
+                    Console.ReadKey();
+                    return;
+                }
+                //librarianRequestIdSelection > 0 && librarianRequestIdSelection <= TextFileHandler.GetLastRequestID(loggedLibrarianID)
+                if (TextFileHandler.CheckByIdIfRequestExists(loggedLibrarianID, librarianRequestIdSelection)) 
                 {
                     string requestData = TextFileHandler.GetRequestDataToString(librarianRequestIdSelection, loggedLibrarianID);
                     exitMenu = LibrarianRequestAcceptance(requestData);
+
+                    if (exitMenu == false)
+                    {
+                        break;
+                    }
                 }
                 else 
                 {
@@ -627,9 +657,19 @@ namespace ClassLibrary
                 Console.WriteLine("___________________________");
                 Console.WriteLine("1. Zaakceptuj");
                 Console.WriteLine("2. Odrzuć");
+                Console.WriteLine("_______________________\n3. Powrót");
 
                 Console.Write("Twój wybór: ");
-                librarianRequestSelection = byte.Parse(Console.ReadLine());
+                try
+                {
+                    librarianRequestSelection = byte.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Błąd!");
+                    Console.ReadKey();
+                    return false;
+                }
 
                 if (librarianRequestSelection == 1)
                 {
@@ -674,9 +714,12 @@ namespace ClassLibrary
 
                     Console.WriteLine("Wypożyczenie zostało odrzucone");
                     TextFileHandler.RemoveRequest(requestID);
-
                     Console.ReadKey();
                     return true;
+                }
+                else if (librarianRequestSelection == 3)
+                {
+                    return false;
                 }
                 else
                 {

@@ -46,7 +46,7 @@ namespace LibraryApplication
 
             Menu.LogInView();
 
-            //Console.WriteLine(TextFileHandler.GetBorrowingElementId(6, 2));
+            //Console.WriteLine(TextFileHandler.CheckByIdIfRequestExists(2, 1));
 
 
             Console.ReadKey();
